@@ -1,0 +1,333 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ _('Admin Dashboard') }}{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item active">{{ _('Dashboard') }}</li>
+    </ul>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fa-solid fa-chart-line me-2" style="color: #0d6efd;"></i>{{ _('Dashboard') }}
+    </h1>
+    <p class="page-subtitle">{{ _('Welcome back') }}，{{ session.get('admin_username', 'Admin') }}！{{ _('This is your system overview') }}</p>
+</div>
+
+<!-- 统计卡片 -->
+<div class="stats-grid">
+    <div class="stat-card modern-box" style="padding: 20px !important;">
+        <div class="stat-header">
+            <span class="stat-label">{{ _('Total Customers') }}</span>
+            <div class="stat-icon blue">
+                <i class="fa-solid fa-users"></i>
+            </div>
+        </div>
+        <div class="stat-value">{{ total_customers|default(0) }}</div>
+        <div class="stat-change up">
+            <span class="change-icon"><i class="fa-solid fa-arrow-up"></i></span>
+            <span class="change-text">{{ new_customers_this_month|default(0) }} {{ _('New This Month') }}</span>
+        </div>
+    </div>
+
+    <div class="stat-card modern-box" style="padding: 20px !important;">
+        <div class="stat-header">
+            <span class="stat-label">{{ _('Total Reports') }}</span>
+            <div class="stat-icon green">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+        </div>
+        <div class="stat-value">{{ total_reports|default(0) }}</div>
+        <div class="stat-change up">
+            <span class="change-icon"><i class="fa-solid fa-arrow-up"></i></span>
+            <span class="change-text">{{ reports_this_month|default(0) }} {{ _('Uploaded This Month') }}</span>
+        </div>
+    </div>
+
+    <div class="stat-card modern-box" style="padding: 20px !important;">
+        <div class="stat-header">
+            <span class="stat-label">{{ _('Pending Uploads') }}</span>
+            <div class="stat-icon orange">
+                <i class="fa-solid fa-clock"></i>
+            </div>
+        </div>
+        <div class="stat-value">{{ pending_uploads|default(0) }}</div>
+        <div class="stat-change">
+            <span class="change-period">{{ _('Waiting for processing') }}</span>
+        </div>
+    </div>
+
+    <div class="stat-card modern-box" style="padding: 20px !important;">
+        <div class="stat-header">
+            <span class="stat-label">{{ _('Active Today') }}</span>
+            <div class="stat-icon red">
+                <i class="fa-solid fa-fire"></i>
+            </div>
+        </div>
+        <div class="stat-value">{{ active_today|default(0) }}</div>
+        <div class="stat-change up">
+            <span class="change-icon"><i class="fa-solid fa-arrow-up"></i></span>
+            <span class="change-period">{{ _('Customers logged in today') }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- 内容网格 -->
+<div class="content-grid">
+    <!-- 左侧：图表和表格 -->
+    <div class="content-main">
+        <!-- 报表上传趋势图 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-chart-column"></i>报表上传趋势
+                </h3>
+                <div class="card-actions">
+                    <button class="btn btn-sm btn-secondary" onclick="updateChart('week')">本周</button>
+                    <button class="btn btn-sm btn-primary" onclick="updateChart('month')">本月</button>
+                    <button class="btn btn-sm btn-secondary" onclick="updateChart('year')">本年</button>
+                </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="chart-container">
+                    <div class="bar-chart" id="trendChart">
+                        {% for item in upload_trend|default([
+                            {'label': '1月', 'value': 12},
+                            {'label': '2月', 'value': 16},
+                            {'label': '3月', 'value': 9},
+                            {'label': '4月', 'value': 18},
+                            {'label': '5月', 'value': 14},
+                            {'label': '6月', 'value': 11}
+                        ]) %}
+                        <div class="bar-item">
+                            <div class="bar" style="height: {{ (item.value / 20 * 100)|int }}%;">
+                                <span class="bar-value">{{ item.value }}</span>
+                            </div>
+                            <span class="bar-label">{{ item.label }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近活动表格 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-list-ul"></i>最近活动
+                </h3>
+                <a href="#" class="btn btn-sm btn-ghost">查看全部 <i class="fa-solid fa-arrow-right ms-1"></i></a>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                {% if recent_activities %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>用户</th>
+                            <th>操作</th>
+                            <th>详情</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in recent_activities %}
+                        <tr>
+                            <td>{{ activity.time }}</td>
+                            <td>
+                                <strong>{{ activity.user }}</strong>
+                            </td>
+                            <td>
+                                <span class="status-badge {{ activity.type }}">{{ activity.action }}</span>
+                            </td>
+                            <td>{{ activity.details }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                    </div>
+                    <div class="empty-state-title">暂无最近活动</div>
+                    <div class="empty-state-desc">系统活动将显示在这里</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧：快速操作和客户概览 -->
+    <div class="content-sidebar">
+        <!-- 快速操作 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-bolt"></i>快速操作
+                </h3>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="quick-actions">
+                    <a href="{{ url_for('admin.customer_create_page') }}" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: #d1fae5;">
+                            <i class="fa-solid fa-plus" style="color: #28a745;"></i>
+                        </div>
+                        <span class="quick-action-title">添加客户</span>
+                    </a>
+                    <a href="{{ url_for('admin.upload_page') }}" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: #cfe2ff;">
+                            <i class="fa-solid fa-cloud-arrow-up" style="color: #0d6efd;"></i>
+                        </div>
+                        <span class="quick-action-title">上传报表</span>
+                    </a>
+                    <a href="{{ url_for('admin.reports_page') }}" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: #cffafe;">
+                            <i class="fa-solid fa-chart-pie" style="color: #06b6d4;"></i>
+                        </div>
+                        <span class="quick-action-title">查看报表</span>
+                    </a>
+                    <a href="{{ url_for('admin.customers_page') }}" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: #fef3c7;">
+                            <i class="fa-solid fa-users-gear" style="color: #f59e0b;"></i>
+                        </div>
+                        <span class="quick-action-title">管理客户</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最新客户 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-user-plus"></i>最新客户
+                </h3>
+                <a href="{{ url_for('admin.customers_page') }}" class="btn btn-sm btn-ghost">查看全部 <i class="fa-solid fa-arrow-right ms-1"></i></a>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                {% if new_customers %}
+                <div class="transaction-list">
+                    {% for customer in new_customers %}
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background: #cfe2ff;">
+                            <i class="fa-solid fa-building" style="color: #0d6efd;"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">{{ customer.company_name }}</div>
+                            <div class="transaction-meta">{{ customer.customer_code }} · {{ customer.created_at }}</div>
+                        </div>
+                        <a href="{{ url_for('admin.customer_edit', id=customer.id) }}" class="btn-icon btn-view">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state" style="padding: 30px 20px;">
+                    <div class="empty-state-icon" style="font-size: 48px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="empty-state-desc">暂无新客户</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 系统状态 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-server"></i>系统状态
+                </h3>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="transaction-list">
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background: #d1fae5;">
+                            <i class="fa-solid fa-check" style="color: #28a745;"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">系统状态</div>
+                            <div class="transaction-meta">所有系统正常运行</div>
+                        </div>
+                        <span class="status-badge success">正常</span>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background: #cffafe;">
+                            <i class="fa-solid fa-hard-drive" style="color: #06b6d4;"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">存储使用</div>
+                            <div class="transaction-meta">{{ storage_used|default('0 GB') }} / {{ storage_total|default('100 GB') }}</div>
+                        </div>
+                        <span class="status-badge success">{{ storage_percent|default('0') }}%</span>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="transaction-icon" style="background: #fef3c7;">
+                            <i class="fa-solid fa-database" style="color: #f59e0b;"></i>
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">数据库状态</div>
+                            <div class="transaction-meta">已连接</div>
+                        </div>
+                        <span class="status-badge success">正常</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 图表更新函数
+    function updateChart(period) {
+        // 更新按钮状态
+        document.querySelectorAll('.card-actions .btn').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+        });
+        event.target.classList.remove('btn-secondary');
+        event.target.classList.add('btn-primary');
+
+        // 模拟数据更新
+        const data = {
+            'week': [5, 8, 12, 6, 9, 11, 7],
+            'month': [12, 16, 9, 18, 14, 11],
+            'year': [45, 52, 38, 61, 55, 48, 72, 68, 59, 81, 76, 69]
+        };
+
+        const labels = {
+            'week': ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            'month': ['1月', '2月', '3月', '4月', '5月', '6月'],
+            'year': ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+        };
+
+        const chartData = data[period];
+        const chartLabels = labels[period];
+        const maxValue = Math.max(...chartData);
+
+        // 更新图表
+        const chartContainer = document.getElementById('trendChart');
+        chartContainer.innerHTML = '';
+
+        chartData.forEach((value, index) => {
+            const barItem = document.createElement('div');
+            barItem.className = 'bar-item';
+            barItem.innerHTML = `
+                <div class="bar" style="height: ${(value / maxValue * 80 + 10)}%;">
+                    <span class="bar-value">${value}</span>
+                </div>
+                <span class="bar-label">${chartLabels[index]}</span>
+            `;
+            chartContainer.appendChild(barItem);
+        });
+    }
+</script>
+{% endblock %}

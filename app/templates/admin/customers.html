@@ -1,0 +1,582 @@
+{% extends "admin/base.html" %}
+
+{% block title %}客户管理{% endblock %}
+
+{% set active_menu = 'customers' %}
+
+{% block extra_css %}
+<style>
+    /* 统计卡片 */
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .stat-icon.blue { background: #cfe2ff; color: #0d6efd; }
+    .stat-icon.green { background: #d1fae5; color: #28a745; }
+    .stat-icon.orange { background: #ffe5cc; color: #fd7e14; }
+    .stat-icon.red { background: #f8d7da; color: #dc3545; }
+
+    .stat-info { flex: 1; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #212529; line-height: 1; }
+    .stat-label { font-size: 13px; color: #6c757d; margin-top: 4px; }
+
+    /* 筛选区域 */
+    .filter-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: end;
+    }
+
+    .filter-item { flex: 1; min-width: 150px; }
+    .filter-item label {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    /* 表格样式 */
+    .customer-table th {
+        font-weight: 600;
+        color: #495057;
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .customer-table td { vertical-align: middle; }
+
+    .customer-name {
+        font-weight: 500;
+        color: #212529;
+    }
+
+    .customer-code {
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    /* 状态标签 */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .status-badge.active { background: #d1fae5; color: #28a745; }
+    .status-badge.suspended { background: #fff3cd; color: #856404; }
+    .status-badge.pending { background: #cfe2ff; color: #0d6efd; }
+    .status-badge.terminated { background: #f8d7da; color: #dc3545; }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    /* 操作按钮 */
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-icon.view { background: #cfe2ff; color: #0d6efd; }
+    .btn-icon.view:hover { background: #0d6efd; color: #fff; }
+    .btn-icon.edit { background: #fff3cd; color: #856404; }
+    .btn-icon.edit:hover { background: #ffc107; color: #fff; }
+    .btn-icon.delete { background: #f8d7da; color: #dc3545; }
+    .btn-icon.delete:hover { background: #dc3545; color: #fff; }
+
+    /* 批量操作栏 */
+    .bulk-action-bar {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: #cfe2ff;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+
+    .bulk-action-bar.active { display: flex; }
+
+    .selected-count {
+        font-weight: 500;
+        color: #0d6efd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">仪表盘</a></li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item active">客户管理</li>
+    </ul>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+    <h1 class="page-title"><i class="fa-solid fa-users me-2" style="color: #0d6efd;"></i>客户管理</h1>
+    <p class="page-subtitle">管理系统中的所有客户信息</p>
+</div>
+
+<!-- 统计卡片 -->
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-info">
+            <div class="stat-value" id="totalCustomers">-</div>
+            <div class="stat-label">客户总数</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-check-circle"></i></div>
+        <div class="stat-info">
+            <div class="stat-value" id="activeCustomers">-</div>
+            <div class="stat-label">正常客户</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon orange"><i class="fa-solid fa-clock"></i></div>
+        <div class="stat-info">
+            <div class="stat-value" id="pendingCustomers">-</div>
+            <div class="stat-label">待审核</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red"><i class="fa-solid fa-ban"></i></div>
+        <div class="stat-info">
+            <div class="stat-value" id="suspendedCustomers">-</div>
+            <div class="stat-label">已暂停</div>
+        </div>
+    </div>
+</div>
+
+<!-- 筛选区域 -->
+<div class="filter-section">
+    <div class="filter-row">
+        <div class="filter-item">
+            <label>搜索</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="客户名称、代码、联系人">
+        </div>
+        <div class="filter-item">
+            <label>状态</label>
+            <select class="form-control" id="filterStatus">
+                <option value="">全部状态</option>
+                <option value="active">正常</option>
+                <option value="pending">待审核</option>
+                <option value="suspended">已暂停</option>
+                <option value="terminated">已终止</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>纳税类型</label>
+            <select class="form-control" id="filterTaxType">
+                <option value="">全部类型</option>
+                <option value="general">一般纳税人</option>
+                <option value="small">小规模纳税人</option>
+            </select>
+        </div>
+        <div class="filter-item" style="flex: 0;">
+            <button class="btn btn-primary" onclick="loadCustomers()">
+                <i class="fa-solid fa-filter me-2"></i>筛选
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 批量操作栏 -->
+<div class="bulk-action-bar" id="bulkActionBar">
+    <span class="selected-count">已选择 <span id="selectedCount">0</span> 个客户</span>
+    <select class="form-control form-control-sm" id="bulkActionSelect" style="width: auto;">
+        <option value="">批量操作...</option>
+        <option value="activate">批量激活</option>
+        <option value="suspend">批量暂停</option>
+        <option value="delete">批量删除</option>
+        <option value="assign_accountant">分配会计</option>
+    </select>
+    <select class="form-control form-control-sm" id="bulkAccountantSelect" style="width: auto; display: none;">
+        <option value="">选择会计...</option>
+        {% for accountant in accountants %}
+        <option value="{{ accountant.id }}">{{ accountant.real_name or accountant.username }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn btn-sm btn-primary" onclick="executeBulkAction()">执行</button>
+    <button class="btn btn-sm btn-secondary" onclick="clearSelection()">取消</button>
+</div>
+
+<!-- 客户列表 -->
+<div class="modern-box">
+    <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="modern-title" style="margin-bottom: 0 !important;"><i class="fa-solid fa-list"></i>客户列表</h3>
+        <a href="{{ url_for('admin.customer_create_page') }}" class="btn btn-primary">
+            <i class="fa-solid fa-plus me-2"></i>新增客户
+        </a>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="table customer-table table-hover" id="customersTable">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
+                        <th>客户信息</th>
+                        <th>联系人</th>
+                        <th>纳税类型</th>
+                        <th>负责会计</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="customersTableBody">
+                    <!-- 数据将通过JS动态加载 -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 分页 -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination"></ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentPage = 1;
+    let totalPages = 1;
+    let selectedCustomers = new Set();
+
+    $(document).ready(function() {
+        loadCustomers();
+        loadStatistics();
+        
+        // 全选复选框
+        $('#selectAll').change(function() {
+            const isChecked = $(this).is(':checked');
+            $('.customer-checkbox').prop('checked', isChecked);
+            
+            if (isChecked) {
+                $('.customer-checkbox').each(function() {
+                    selectedCustomers.add($(this).val());
+                });
+            } else {
+                selectedCustomers.clear();
+            }
+            updateBulkActionBar();
+        });
+        
+        // 批量操作选择变化
+        $('#bulkActionSelect').change(function() {
+            const action = $(this).val();
+            if (action === 'assign_accountant') {
+                $('#bulkAccountantSelect').show();
+            } else {
+                $('#bulkAccountantSelect').hide();
+            }
+        });
+    });
+
+    // 加载客户列表
+    function loadCustomers(page = 1) {
+        currentPage = page;
+        
+        const params = { page: page, per_page: 10 };
+        const status = $('#filterStatus').val();
+        const taxType = $('#filterTaxType').val();
+        const search = $('#searchInput').val();
+        
+        if (status) params.status = status;
+        if (taxType) params.tax_type = taxType;
+        if (search) params.search = search;
+        
+        $.ajax({
+            url: '{{ url_for("admin.list_customers") }}',
+            method: 'GET',
+            data: params,
+            success: function(response) {
+                if (response.success) {
+                    renderCustomersTable(response.data.items);
+                    renderPagination(response.data.page, response.data.total, response.data.per_page);
+                }
+            },
+            error: function() {
+                showToast('错误', '加载客户列表失败', 'error');
+            }
+        });
+    }
+
+    // 渲染客户表格
+    function renderCustomersTable(customers) {
+        const tbody = $('#customersTableBody');
+        tbody.empty();
+        
+        if (customers.length === 0) {
+            tbody.html('<tr><td colspan="8" class="text-center py-4">暂无客户数据</td></tr>');
+            return;
+        }
+        
+        customers.forEach(function(customer) {
+            const statusMap = {
+                'active': { class: 'active', text: '正常', dot: '#28a745' },
+                'pending': { class: 'pending', text: '待审核', dot: '#0d6efd' },
+                'suspended': { class: 'suspended', text: '已暂停', dot: '#ffc107' },
+                'terminated': { class: 'terminated', text: '已终止', dot: '#dc3545' }
+            };
+            const status = statusMap[customer.status] || statusMap.active;
+            
+            const taxTypeText = customer.tax_type === 'general' ? '一般纳税人' : 
+                               customer.tax_type === 'small' ? '小规模纳税人' : '-';
+            
+            const isSelected = selectedCustomers.has(customer.id.toString());
+            
+            const row = `
+                <tr>
+                    <td><input type="checkbox" class="customer-checkbox" value="${customer.id}" ${isSelected ? 'checked' : ''} onchange="toggleCustomerSelection('${customer.id}')"></td>
+                    <td>
+                        <div class="customer-name">${customer.company_name}</div>
+                        <div class="customer-code">${customer.customer_code || '-'}</div>
+                    </td>
+                    <td>
+                        <div>${customer.contact_name || '-'}</div>
+                        <div style="font-size: 12px; color: #6c757d;">${customer.contact_phone || ''}</div>
+                    </td>
+                    <td>${taxTypeText}</td>
+                    <td>${customer.accountant_name || '-'}</td>
+                    <td>
+                        <span class="status-badge ${status.class}">
+                            <span class="status-dot" style="background: ${status.dot};"></span>
+                            ${status.text}
+                        </span>
+                    </td>
+                    <td>${customer.created_at ? customer.created_at.substring(0, 10) : '-'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="/admin/customers/${customer.id}/detail" class="btn-icon view" title="查看">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a href="/admin/customers/${customer.id}/edit" class="btn-icon edit" title="编辑">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <button class="btn-icon delete" onclick="deleteCustomer(${customer.id})" title="删除">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+    }
+
+    // 渲染分页
+    function renderPagination(page, total, perPage) {
+        totalPages = Math.ceil(total / perPage);
+        const pagination = $('#pagination');
+        pagination.empty();
+        
+        if (totalPages <= 1) return;
+        
+        if (page > 1) {
+            pagination.append(`<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadCustomers(${page - 1})">上一页</a></li>`);
+        }
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === page) {
+                pagination.append(`<li class="page-item active"><span class="page-link">${i}</span></li>`);
+            } else if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
+                pagination.append(`<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadCustomers(${i})">${i}</a></li>`);
+            } else if (i === page - 3 || i === page + 3) {
+                pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+        }
+        
+        if (page < totalPages) {
+            pagination.append(`<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadCustomers(${page + 1})">下一页</a></li>`);
+        }
+    }
+
+    // 加载统计数据
+    function loadStatistics() {
+        $.ajax({
+            url: '{{ url_for("admin.get_customer_statistics") }}',
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    $('#totalCustomers').text(response.data.total);
+                    $('#activeCustomers').text(response.data.by_status.active || 0);
+                    $('#pendingCustomers').text(response.data.by_status.pending || 0);
+                    $('#suspendedCustomers').text(response.data.by_status.suspended || 0);
+                }
+            }
+        });
+    }
+
+    // 切换客户选择
+    function toggleCustomerSelection(customerId) {
+        if (selectedCustomers.has(customerId)) {
+            selectedCustomers.delete(customerId);
+        } else {
+            selectedCustomers.add(customerId);
+        }
+        updateBulkActionBar();
+    }
+
+    // 全选/取消全选
+    function toggleSelectAll() {
+        const isChecked = $('#selectAll').is(':checked');
+        $('.customer-checkbox').prop('checked', isChecked);
+        
+        if (isChecked) {
+            $('.customer-checkbox').each(function() {
+                selectedCustomers.add($(this).val());
+            });
+        } else {
+            selectedCustomers.clear();
+        }
+        updateBulkActionBar();
+    }
+
+    // 更新批量操作栏
+    function updateBulkActionBar() {
+        $('#selectedCount').text(selectedCustomers.size);
+        if (selectedCustomers.size > 0) {
+            $('#bulkActionBar').addClass('active');
+        } else {
+            $('#bulkActionBar').removeClass('active');
+        }
+    }
+
+    // 清除选择
+    function clearSelection() {
+        selectedCustomers.clear();
+        $('#selectAll').prop('checked', false);
+        $('.customer-checkbox').prop('checked', false);
+        updateBulkActionBar();
+    }
+
+    // 执行批量操作
+    function executeBulkAction() {
+        const action = $('#bulkActionSelect').val();
+        if (!action) {
+            showToast('警告', '请选择操作类型', 'error');
+            return;
+        }
+        
+        if (selectedCustomers.size === 0) {
+            showToast('警告', '请选择客户', 'error');
+            return;
+        }
+        
+        const customerIds = Array.from(selectedCustomers);
+        const data = { action: action, customer_ids: customerIds };
+        
+        if (action === 'assign_accountant') {
+            const accountantId = $('#bulkAccountantSelect').val();
+            if (!accountantId) {
+                showToast('警告', '请选择会计', 'error');
+                return;
+            }
+            data.accountant_id = parseInt(accountantId);
+        }
+        
+        if (action === 'delete') {
+            if (!confirm('确定要删除选中的客户吗？此操作不可恢复。')) {
+                return;
+            }
+        }
+        
+        $.ajax({
+            url: '{{ url_for("admin.customers_bulk_action") }}',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response.success) {
+                    showToast('成功', `操作完成：成功${response.data.success_count}个，失败${response.data.failed_count}个`, 'success');
+                    clearSelection();
+                    loadCustomers(currentPage);
+                    loadStatistics();
+                }
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON?.message || '操作失败';
+                showToast('错误', message, 'error');
+            }
+        });
+    }
+
+    // 删除客户
+    function deleteCustomer(customerId) {
+        if (!confirm('确定要删除此客户吗？此操作不可恢复。')) {
+            return;
+        }
+        
+        $.ajax({
+            url: `/admin/customers/${customerId}`,
+            method: 'DELETE',
+            success: function(response) {
+                if (response.success) {
+                    showToast('成功', '客户已删除', 'success');
+                    loadCustomers(currentPage);
+                    loadStatistics();
+                }
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON?.message || '删除失败';
+                showToast('错误', message, 'error');
+            }
+        });
+    }
+</script>
+{% endblock %}

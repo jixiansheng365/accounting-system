@@ -1,0 +1,720 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_Hant_TW\n"
+
+# 系統通用
+msgid "Accounting Customer Management System"
+msgstr "代理記帳客戶管理系統"
+
+msgid "Smart Bookkeeping"
+msgstr "智能記帳"
+
+msgid "Home"
+msgstr "首頁"
+
+msgid "Login"
+msgstr "登入"
+
+msgid "Logout"
+msgstr "登出"
+
+msgid "Register"
+msgstr "註冊"
+
+msgid "Username"
+msgstr "使用者名稱"
+
+msgid "Password"
+msgstr "密碼"
+
+msgid "Email"
+msgstr "電子郵件"
+
+msgid "Phone"
+msgstr "電話"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Edit"
+msgstr "編輯"
+
+msgid "Create"
+msgstr "建立"
+
+msgid "Search"
+msgstr "搜尋"
+
+msgid "Filter"
+msgstr "篩選"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Created At"
+msgstr "建立時間"
+
+msgid "Updated At"
+msgstr "更新時間"
+
+msgid "Close"
+msgstr "關閉"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Confirm"
+msgstr "確認"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Loading"
+msgstr "載入中"
+
+msgid "No data"
+msgstr "暫無資料"
+
+# 登入頁面
+msgid "User Login"
+msgstr "使用者登入"
+
+msgid "Welcome back, please login to your account"
+msgstr "歡迎回來，請登入您的帳號"
+
+msgid "Customer Code"
+msgstr "客戶代碼"
+
+msgid "Enter customer code"
+msgstr "請輸入客戶代碼"
+
+msgid "Enter password"
+msgstr "請輸入密碼"
+
+msgid "Forgot password"
+msgstr "忘記密碼"
+
+msgid "Contact accounting firm"
+msgstr "聯絡會計事務所"
+
+# 語言選擇
+msgid "Simplified Chinese"
+msgstr "簡體中文"
+
+msgid "Traditional Chinese"
+msgstr "繁體中文"
+
+msgid "Japanese"
+msgstr "日本語"
+
+msgid "Korean"
+msgstr "韓語"
+
+msgid "English"
+msgstr "English"
+
+# 首頁
+msgid "Professional Bookkeeping Services"
+msgstr "專業代理記帳服務"
+
+msgid "We provide efficient and accurate bookkeeping services for Japanese enterprises, supporting multilingual communication."
+msgstr "我們為日資企業提供高效準確的代理記帳服務，支援多語言溝通。"
+
+msgid "Get Started"
+msgstr "立即開始"
+
+msgid "Learn More"
+msgstr "了解更多"
+
+msgid "Our Services"
+msgstr "我們的服務"
+
+msgid "Comprehensive bookkeeping and financial management services"
+msgstr "全面的代理記帳與財務管理服務"
+
+msgid "Professional Bookkeeping"
+msgstr "專業記帳"
+
+msgid "Accurate and timely bookkeeping services"
+msgstr "準確及時的記帳服務"
+
+msgid "Financial Reports"
+msgstr "財務報表"
+
+msgid "Detailed financial statements and analysis"
+msgstr "詳細的財務報表與分析"
+
+msgid "Tax Consultation"
+msgstr "稅務諮詢"
+
+msgid "Professional tax planning and filing"
+msgstr "專業的稅務規劃與申報"
+
+msgid "Compliance Management"
+msgstr "合規管理"
+
+msgid "Ensure compliance with all regulations"
+msgstr "確保符合所有法規要求"
+
+msgid "Why Choose Us"
+msgstr "為何選擇我們"
+
+msgid "We specialize in professional bookkeeping services for Japanese enterprises with extensive experience and expert team."
+msgstr "我們專注於為日資企業提供專業代理記帳服務，擁有豐富的經驗與專業團隊。"
+
+msgid "Multi-language Support (CN/TW/JP/EN/KR)"
+msgstr "多語言支援（中/繁/日/英/韓）"
+
+msgid "24/7 Online Access"
+msgstr "全天候線上存取"
+
+msgid "Secure Data Storage"
+msgstr "安全的資料儲存"
+
+msgid "Ready to streamline your bookkeeping?"
+msgstr "準備好簡化您的記帳流程了嗎？"
+
+msgid "Contact us today for a free consultation and learn how we can help your business."
+msgstr "立即聯絡我們取得免費諮詢，了解我們如何協助您的企業。"
+
+msgid "Contact Sales"
+msgstr "聯絡業務"
+
+msgid "View Pricing"
+msgstr "查看價格"
+
+msgid "About Us"
+msgstr "關於我們"
+
+msgid "Services"
+msgstr "服務"
+
+msgid "Pricing"
+msgstr "價格"
+
+msgid "Contact"
+msgstr "聯絡我們"
+
+msgid "Contact Information"
+msgstr "聯絡資訊"
+
+msgid "All rights reserved"
+msgstr "版權所有"
+
+# 客戶儀表板
+msgid "Accounting Portal"
+msgstr "客戶入口網站"
+
+msgid "Dashboard"
+msgstr "儀表板"
+
+msgid "Report Query"
+msgstr "報表查詢"
+
+msgid "Monthly Reports"
+msgstr "月度報表"
+
+msgid "Login History"
+msgstr "登入紀錄"
+
+msgid "Welcome back"
+msgstr "歡迎回來"
+
+msgid "You have"
+msgstr "您有"
+
+msgid "new reports"
+msgstr "份新報表"
+
+msgid "View All"
+msgstr "查看全部"
+
+msgid "Recent Reports"
+msgstr "最近報表"
+
+msgid "Report Type"
+msgstr "報表類型"
+
+msgid "Period"
+msgstr "期間"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Download"
+msgstr "下載"
+
+msgid "Quick Actions"
+msgstr "快速操作"
+
+msgid "Query Reports"
+msgstr "查詢報表"
+
+msgid "View Records"
+msgstr "查看紀錄"
+
+msgid "System Status"
+msgstr "系統狀態"
+
+msgid "System Running"
+msgstr "系統運作中"
+
+msgid "Data Sync"
+msgstr "資料同步"
+
+msgid "Service Status"
+msgstr "服務狀態"
+
+msgid "Normal"
+msgstr "正常"
+
+msgid "Online"
+msgstr "線上"
+
+msgid "Detail Ledger"
+msgstr "明細帳"
+
+msgid "Profit Statement"
+msgstr "損益表"
+
+msgid "Balance Sheet"
+msgstr "資產負債表"
+
+msgid "Monthly Report"
+msgstr "月報"
+
+msgid "Completed"
+msgstr "已完成"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Please select reports to download"
+msgstr "請選擇要下載的報表"
+
+msgid "Year"
+msgstr "年度"
+
+msgid "Month"
+msgstr "月份"
+
+msgid "Select year"
+msgstr "選擇年度"
+
+msgid "Select month"
+msgstr "選擇月份"
+
+msgid "All Types"
+msgstr "所有類型"
+
+msgid "Query"
+msgstr "查詢"
+
+msgid "Reset"
+msgstr "重設"
+
+msgid "No reports found"
+msgstr "找不到報表"
+
+msgid "Report List"
+msgstr "報表清單"
+
+msgid "File Name"
+msgstr "檔案名稱"
+
+msgid "File Size"
+msgstr "檔案大小"
+
+msgid "Upload Date"
+msgstr "上傳日期"
+
+msgid "Preview"
+msgstr "預覽"
+
+msgid "of"
+msgstr "共"
+
+msgid "items"
+msgstr "筆"
+
+msgid "Previous"
+msgstr "上一頁"
+
+msgid "Next"
+msgstr "下一頁"
+
+msgid "Customer"
+msgstr "客戶"
+
+# 管理後台
+msgid "Admin Dashboard"
+msgstr "管理後台"
+
+msgid "Customer Management"
+msgstr "客戶管理"
+
+msgid "Report Management"
+msgstr "報表管理"
+
+msgid "Upload Report"
+msgstr "上傳報表"
+
+msgid "System Settings"
+msgstr "系統設定"
+
+msgid "System Logs"
+msgstr "系統紀錄"
+
+msgid "Admin"
+msgstr "管理員"
+
+msgid "Total Reports"
+msgstr "報表總數"
+
+msgid "This Month New"
+msgstr "本月新增"
+
+msgid "Recent Customers"
+msgstr "最近客戶"
+
+msgid "Add Customer"
+msgstr "新增客戶"
+
+msgid "Customer Name"
+msgstr "客戶名稱"
+
+msgid "Contact Person"
+msgstr "聯絡人"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Operations"
+msgstr "操作"
+
+msgid "View"
+msgstr "檢視"
+
+msgid "Are you sure?"
+msgstr "確定嗎？"
+
+msgid "Total"
+msgstr "總計"
+
+msgid "records"
+msgstr "筆紀錄"
+
+msgid "Upload"
+msgstr "上傳"
+
+msgid "Select Customer"
+msgstr "選擇客戶"
+
+msgid "Select File"
+msgstr "選擇檔案"
+
+msgid "Drag and drop files here or click to select"
+msgstr "拖曳檔案至此處或點擊選擇"
+
+msgid "Supported formats: PDF, Excel, Word"
+msgstr "支援格式：PDF、Excel、Word"
+
+msgid "Uploading"
+msgstr "上傳中"
+
+msgid "Upload Success"
+msgstr "上傳成功"
+
+msgid "Upload Failed"
+msgstr "上傳失敗"
+
+# 認證相關
+msgid "Login successful"
+msgstr "登入成功"
+
+msgid "Logout successful"
+msgstr "登出成功"
+
+msgid "Username and password are required"
+msgstr "使用者名稱與密碼為必填"
+
+msgid "Invalid username or password"
+msgstr "使用者名稱或密碼錯誤"
+
+msgid "Account has been disabled"
+msgstr "帳號已被停用"
+
+msgid "Not logged in"
+msgstr "未登入"
+
+msgid "User not found"
+msgstr "找不到使用者"
+
+msgid "Registration successful"
+msgstr "註冊成功"
+
+msgid "Username already exists"
+msgstr "使用者名稱已存在"
+
+msgid "Email already exists"
+msgstr "電子郵件已存在"
+
+msgid "Username, email and password are required"
+msgstr "使用者名稱、電子郵件與密碼為必填"
+
+msgid "Password changed successfully"
+msgstr "密碼修改成功"
+
+msgid "Old password and new password are required"
+msgstr "舊密碼與新密碼為必填"
+
+msgid "Invalid old password"
+msgstr "舊密碼錯誤"
+
+msgid "Last Login Time"
+msgstr "上次登入時間"
+
+msgid "IP Address"
+msgstr "IP位址"
+
+msgid "User Agent"
+msgstr "使用者代理"
+
+msgid "Login Time"
+msgstr "登入時間"
+
+msgid "Logout Time"
+msgstr "登出時間"
+
+msgid "Real Name"
+msgstr "真實姓名"
+
+msgid "Role"
+msgstr "角色"
+
+msgid "Active"
+msgstr "啟用"
+
+msgid "Inactive"
+msgstr "停用"
+
+msgid "User List"
+msgstr "使用者清單"
+
+msgid "Add User"
+msgstr "新增使用者"
+
+msgid "Edit User"
+msgstr "編輯使用者"
+
+msgid "Accountant"
+msgstr "會計師"
+
+msgid "Manager"
+msgstr "經理"
+
+msgid "Administrator"
+msgstr "管理員"
+
+msgid "Last Login"
+msgstr "上次登入"
+
+msgid "Never"
+msgstr "從未"
+
+msgid "Reports"
+msgstr "報表"
+
+msgid "Users"
+msgstr "使用者"
+
+msgid "Customers"
+msgstr "客戶"
+
+msgid "CN"
+msgstr "中"
+
+msgid "TW"
+msgstr "繁"
+
+msgid "JP"
+msgstr "日"
+
+msgid "KR"
+msgstr "韓"
+
+msgid "EN"
+msgstr "英"
+
+# 新增翻譯
+msgid "Total Logins"
+msgstr "總登入次數"
+
+msgid "Successful Logins"
+msgstr "成功登入"
+
+msgid "Failed Logins"
+msgstr "失敗登入"
+
+msgid "Recent Login Activities"
+msgstr "近期登入活動"
+
+msgid "Date Time"
+msgstr "日期時間"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Device"
+msgstr "裝置"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Failed"
+msgstr "失敗"
+
+msgid "No login history records"
+msgstr "暫無登入紀錄"
+
+msgid "View your recent login activities and security information"
+msgstr "檢視您的近期登入活動和安全資訊"
+
+msgid "Report Name"
+msgstr "報表名稱"
+
+msgid "Download Count"
+msgstr "下載次數"
+
+msgid "View and manage all your monthly reports"
+msgstr "檢視和管理您的所有月度報表"
+
+msgid "Search and download your financial reports"
+msgstr "搜尋並下載您的財務報表"
+
+msgid "Filter Reports"
+msgstr "篩選報表"
+
+msgid "Quick Filter"
+msgstr "快速篩選"
+
+msgid "Last 3 Months"
+msgstr "近3個月"
+
+msgid "Last 6 Months"
+msgstr "近6個月"
+
+msgid "Last Year"
+msgstr "近1年"
+
+msgid "Search Results"
+msgstr "搜尋結果"
+
+msgid "Bulk Download"
+msgstr "批次下載"
+
+msgid "vs Last Month"
+msgstr "較上月"
+
+msgid "Filter by period"
+msgstr "按期間篩選"
+
+msgid "Settings"
+msgstr "設定"
+
+# 管理後台新增翻譯
+msgid "Upload financial reports for customers"
+msgstr "為客戶上傳財務報表"
+
+msgid "Files to Upload"
+msgstr "待上傳檔案"
+
+msgid "Clear All"
+msgstr "清空全部"
+
+msgid "Files"
+msgstr "檔案數"
+
+msgid "Total Size"
+msgstr "總大小"
+
+msgid "Uploaded"
+msgstr "已上傳"
+
+msgid "Start Upload"
+msgstr "開始上傳"
+
+msgid "Batch Settings"
+msgstr "批次設定"
+
+msgid "Apply to all files"
+msgstr "套用到所有檔案"
+
+msgid "Auto Detect"
+msgstr "自動偵測"
+
+msgid "Report Period"
+msgstr "報表期間"
+
+msgid "Home"
+msgstr "首頁"
+
+msgid "Register"
+msgstr "註冊"
+
+msgid "Contact Us"
+msgstr "聯絡我們"
+
+msgid "Month"
+msgstr "月"
+
+# 管理儀表板新增翻譯
+msgid "This is your system overview"
+msgstr "這是您的系統概覽"
+
+msgid "Total Customers"
+msgstr "客戶總數"
+
+msgid "New This Month"
+msgstr "本月新增"
+
+msgid "Uploaded This Month"
+msgstr "本月上傳"
+
+msgid "Pending Uploads"
+msgstr "待處理上傳"
+
+msgid "Waiting for processing"
+msgstr "等待處理"
+
+msgid "Active Today"
+msgstr "今日活躍"
+
+msgid "Customers logged in today"
+msgstr "客戶今日登入"

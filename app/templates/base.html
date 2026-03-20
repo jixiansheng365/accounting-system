@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'zh_CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <!-- Bootstrap5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- 全局响应式容器 -->
+    <div class="container-fluid px-3 px-md-4">
+        <div class="app-container">
+            <header class="app-header">
+                <div class="header-inner">
+                    <div class="logo">
+                        <a href="{{ url_for('main.index') }}">{{ app_name }}</a>
+                    </div>
+                    {% if session.get('user_id') %}
+                    <div class="header-right">
+                        <div class="language-switcher">
+                            <a href="?lang=ja" class="lang-btn {% if session.get('lang') == 'ja' %}active{% endif %}">日本語</a>
+                            <a href="?lang=en" class="lang-btn {% if session.get('lang') == 'en' %}active{% endif %}">English</a>
+                            <a href="?lang=zh_CN" class="lang-btn {% if session.get('lang') == 'zh_CN' %}active{% endif %}">简体</a>
+                            <a href="?lang=zh_TW" class="lang-btn {% if session.get('lang') == 'zh_TW' %}active{% endif %}">繁體</a>
+                        </div>
+                        <div class="user-info">
+                            <span class="username">{{ session.get('username', '') }}</span>
+                            <a href="{{ url_for('auth.logout_page') }}" class="btn btn-secondary btn-sm">{{ _('Logout') }}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main class="app-main">
+                {% block content %}{% endblock %}
+            </main>
+
+            <footer class="app-footer">
+                <div class="footer-inner">
+                    <p>&copy; 2026 {{ app_name }} - v{{ app_version }}</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Bootstrap5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

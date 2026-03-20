@@ -1,0 +1,720 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+# System Common
+msgid "Accounting Customer Management System"
+msgstr "Accounting Customer Management System"
+
+msgid "Smart Bookkeeping"
+msgstr "Smart Bookkeeping"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Register"
+msgstr "Register"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Create"
+msgstr "Create"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Created At"
+msgstr "Created At"
+
+msgid "Updated At"
+msgstr "Updated At"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "No data"
+msgstr "No data"
+
+# Login Page
+msgid "User Login"
+msgstr "User Login"
+
+msgid "Welcome back, please login to your account"
+msgstr "Welcome back, please login to your account"
+
+msgid "Customer Code"
+msgstr "Customer Code"
+
+msgid "Enter customer code"
+msgstr "Enter customer code"
+
+msgid "Enter password"
+msgstr "Enter password"
+
+msgid "Forgot password"
+msgstr "Forgot password"
+
+msgid "Contact accounting firm"
+msgstr "Contact accounting firm"
+
+# Language Selection
+msgid "Simplified Chinese"
+msgstr "Simplified Chinese"
+
+msgid "Traditional Chinese"
+msgstr "Traditional Chinese"
+
+msgid "Japanese"
+msgstr "Japanese"
+
+msgid "Korean"
+msgstr "Korean"
+
+msgid "English"
+msgstr "English"
+
+# Homepage
+msgid "Professional Bookkeeping Services"
+msgstr "Professional Bookkeeping Services"
+
+msgid "We provide efficient and accurate bookkeeping services for Japanese enterprises, supporting multilingual communication."
+msgstr "We provide efficient and accurate bookkeeping services for Japanese enterprises, supporting multilingual communication."
+
+msgid "Get Started"
+msgstr "Get Started"
+
+msgid "Learn More"
+msgstr "Learn More"
+
+msgid "Our Services"
+msgstr "Our Services"
+
+msgid "Comprehensive bookkeeping and financial management services"
+msgstr "Comprehensive bookkeeping and financial management services"
+
+msgid "Professional Bookkeeping"
+msgstr "Professional Bookkeeping"
+
+msgid "Accurate and timely bookkeeping services"
+msgstr "Accurate and timely bookkeeping services"
+
+msgid "Financial Reports"
+msgstr "Financial Reports"
+
+msgid "Detailed financial statements and analysis"
+msgstr "Detailed financial statements and analysis"
+
+msgid "Tax Consultation"
+msgstr "Tax Consultation"
+
+msgid "Professional tax planning and filing"
+msgstr "Professional tax planning and filing"
+
+msgid "Compliance Management"
+msgstr "Compliance Management"
+
+msgid "Ensure compliance with all regulations"
+msgstr "Ensure compliance with all regulations"
+
+msgid "Why Choose Us"
+msgstr "Why Choose Us"
+
+msgid "We specialize in professional bookkeeping services for Japanese enterprises with extensive experience and expert team."
+msgstr "We specialize in professional bookkeeping services for Japanese enterprises with extensive experience and expert team."
+
+msgid "Multi-language Support (CN/TW/JP/EN/KR)"
+msgstr "Multi-language Support (CN/TW/JP/EN/KR)"
+
+msgid "24/7 Online Access"
+msgstr "24/7 Online Access"
+
+msgid "Secure Data Storage"
+msgstr "Secure Data Storage"
+
+msgid "Ready to streamline your bookkeeping?"
+msgstr "Ready to streamline your bookkeeping?"
+
+msgid "Contact us today for a free consultation and learn how we can help your business."
+msgstr "Contact us today for a free consultation and learn how we can help your business."
+
+msgid "Contact Sales"
+msgstr "Contact Sales"
+
+msgid "View Pricing"
+msgstr "View Pricing"
+
+msgid "About Us"
+msgstr "About Us"
+
+msgid "Services"
+msgstr "Services"
+
+msgid "Pricing"
+msgstr "Pricing"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Contact Information"
+msgstr "Contact Information"
+
+msgid "All rights reserved"
+msgstr "All rights reserved"
+
+# Customer Dashboard
+msgid "Accounting Portal"
+msgstr "Accounting Portal"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Report Query"
+msgstr "Report Query"
+
+msgid "Monthly Reports"
+msgstr "Monthly Reports"
+
+msgid "Login History"
+msgstr "Login History"
+
+msgid "Welcome back"
+msgstr "Welcome back"
+
+msgid "You have"
+msgstr "You have"
+
+msgid "new reports"
+msgstr "new reports"
+
+msgid "View All"
+msgstr "View All"
+
+msgid "Recent Reports"
+msgstr "Recent Reports"
+
+msgid "Report Type"
+msgstr "Report Type"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Quick Actions"
+msgstr "Quick Actions"
+
+msgid "Query Reports"
+msgstr "Query Reports"
+
+msgid "View Records"
+msgstr "View Records"
+
+msgid "System Status"
+msgstr "System Status"
+
+msgid "System Running"
+msgstr "System Running"
+
+msgid "Data Sync"
+msgstr "Data Sync"
+
+msgid "Service Status"
+msgstr "Service Status"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Detail Ledger"
+msgstr "Detail Ledger"
+
+msgid "Profit Statement"
+msgstr "Profit Statement"
+
+msgid "Balance Sheet"
+msgstr "Balance Sheet"
+
+msgid "Monthly Report"
+msgstr "Monthly Report"
+
+msgid "Completed"
+msgstr "Completed"
+
+msgid "All"
+msgstr "All"
+
+msgid "Please select reports to download"
+msgstr "Please select reports to download"
+
+msgid "Year"
+msgstr "Year"
+
+msgid "Month"
+msgstr "Month"
+
+# Admin Dashboard additional translations
+msgid "This is your system overview"
+msgstr "This is your system overview"
+
+msgid "Total Customers"
+msgstr "Total Customers"
+
+msgid "New This Month"
+msgstr "New This Month"
+
+msgid "Uploaded This Month"
+msgstr "Uploaded This Month"
+
+msgid "Pending Uploads"
+msgstr "Pending Uploads"
+
+msgid "Waiting for processing"
+msgstr "Waiting for processing"
+
+msgid "Active Today"
+msgstr "Active Today"
+
+msgid "Customers logged in today"
+msgstr "Customers logged in today"
+
+msgid "Select year"
+msgstr "Select year"
+
+msgid "Select month"
+msgstr "Select month"
+
+msgid "All Types"
+msgstr "All Types"
+
+msgid "Query"
+msgstr "Query"
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "No reports found"
+msgstr "No reports found"
+
+msgid "Report List"
+msgstr "Report List"
+
+msgid "File Name"
+msgstr "File Name"
+
+msgid "File Size"
+msgstr "File Size"
+
+msgid "Upload Date"
+msgstr "Upload Date"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "of"
+msgstr "of"
+
+msgid "items"
+msgstr "items"
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Customer"
+msgstr "Customer"
+
+# Admin Panel
+msgid "Admin Dashboard"
+msgstr "Admin Dashboard"
+
+msgid "Customer Management"
+msgstr "Customer Management"
+
+msgid "Report Management"
+msgstr "Report Management"
+
+msgid "Upload Report"
+msgstr "Upload Report"
+
+msgid "System Settings"
+msgstr "System Settings"
+
+msgid "System Logs"
+msgstr "System Logs"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Total Reports"
+msgstr "Total Reports"
+
+msgid "This Month New"
+msgstr "This Month New"
+
+msgid "Recent Customers"
+msgstr "Recent Customers"
+
+msgid "Add Customer"
+msgstr "Add Customer"
+
+msgid "Customer Name"
+msgstr "Customer Name"
+
+msgid "Contact Person"
+msgstr "Contact Person"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "Operations"
+msgstr "Operations"
+
+msgid "View"
+msgstr "View"
+
+msgid "Are you sure?"
+msgstr "Are you sure?"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "records"
+msgstr "records"
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Select Customer"
+msgstr "Select Customer"
+
+msgid "Select File"
+msgstr "Select File"
+
+msgid "Drag and drop files here or click to select"
+msgstr "Drag and drop files here or click to select"
+
+msgid "Supported formats: PDF, Excel, Word"
+msgstr "Supported formats: PDF, Excel, Word"
+
+msgid "Uploading"
+msgstr "Uploading"
+
+msgid "Upload Success"
+msgstr "Upload Success"
+
+msgid "Upload Failed"
+msgstr "Upload Failed"
+
+# Authentication
+msgid "Login successful"
+msgstr "Login successful"
+
+msgid "Logout successful"
+msgstr "Logout successful"
+
+msgid "Username and password are required"
+msgstr "Username and password are required"
+
+msgid "Invalid username or password"
+msgstr "Invalid username or password"
+
+msgid "Account has been disabled"
+msgstr "Account has been disabled"
+
+msgid "Not logged in"
+msgstr "Not logged in"
+
+msgid "User not found"
+msgstr "User not found"
+
+msgid "Registration successful"
+msgstr "Registration successful"
+
+msgid "Username already exists"
+msgstr "Username already exists"
+
+msgid "Email already exists"
+msgstr "Email already exists"
+
+msgid "Username, email and password are required"
+msgstr "Username, email and password are required"
+
+msgid "Password changed successfully"
+msgstr "Password changed successfully"
+
+msgid "Old password and new password are required"
+msgstr "Old password and new password are required"
+
+msgid "Invalid old password"
+msgstr "Invalid old password"
+
+msgid "Last Login Time"
+msgstr "Last Login Time"
+
+msgid "IP Address"
+msgstr "IP Address"
+
+msgid "User Agent"
+msgstr "User Agent"
+
+msgid "Login Time"
+msgstr "Login Time"
+
+msgid "Logout Time"
+msgstr "Logout Time"
+
+msgid "Real Name"
+msgstr "Real Name"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "User List"
+msgstr "User List"
+
+msgid "Add User"
+msgstr "Add User"
+
+msgid "Edit User"
+msgstr "Edit User"
+
+msgid "Accountant"
+msgstr "Accountant"
+
+msgid "Manager"
+msgstr "Manager"
+
+msgid "Administrator"
+msgstr "Administrator"
+
+msgid "Last Login"
+msgstr "Last Login"
+
+msgid "Never"
+msgstr "Never"
+
+msgid "Reports"
+msgstr "Reports"
+
+msgid "Users"
+msgstr "Users"
+
+msgid "Customers"
+msgstr "Customers"
+
+msgid "CN"
+msgstr "CN"
+
+msgid "TW"
+msgstr "TW"
+
+msgid "JP"
+msgstr "JP"
+
+msgid "KR"
+msgstr "KR"
+
+msgid "EN"
+msgstr "EN"
+
+# Additional translations
+msgid "Total Logins"
+msgstr "Total Logins"
+
+msgid "Successful Logins"
+msgstr "Successful Logins"
+
+msgid "Failed Logins"
+msgstr "Failed Logins"
+
+msgid "Recent Login Activities"
+msgstr "Recent Login Activities"
+
+msgid "Date Time"
+msgstr "Date Time"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Device"
+msgstr "Device"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Failed"
+msgstr "Failed"
+
+msgid "No login history records"
+msgstr "No login history records"
+
+msgid "View your recent login activities and security information"
+msgstr "View your recent login activities and security information"
+
+msgid "Report Name"
+msgstr "Report Name"
+
+msgid "Download Count"
+msgstr "Download Count"
+
+msgid "View and manage all your monthly reports"
+msgstr "View and manage all your monthly reports"
+
+msgid "Search and download your financial reports"
+msgstr "Search and download your financial reports"
+
+msgid "Filter Reports"
+msgstr "Filter Reports"
+
+msgid "Quick Filter"
+msgstr "Quick Filter"
+
+msgid "Last 3 Months"
+msgstr "Last 3 Months"
+
+msgid "Last 6 Months"
+msgstr "Last 6 Months"
+
+msgid "Last Year"
+msgstr "Last Year"
+
+msgid "Search Results"
+msgstr "Search Results"
+
+msgid "Bulk Download"
+msgstr "Bulk Download"
+
+msgid "vs Last Month"
+msgstr "vs Last Month"
+
+msgid "Filter by period"
+msgstr "Filter by period"
+
+msgid "Settings"
+msgstr "Settings"
+
+# Admin panel additional translations
+msgid "Upload financial reports for customers"
+msgstr "Upload financial reports for customers"
+
+msgid "Files to Upload"
+msgstr "Files to Upload"
+
+msgid "Clear All"
+msgstr "Clear All"
+
+msgid "Files"
+msgstr "Files"
+
+msgid "Total Size"
+msgstr "Total Size"
+
+msgid "Uploaded"
+msgstr "Uploaded"
+
+msgid "Start Upload"
+msgstr "Start Upload"
+
+msgid "Batch Settings"
+msgstr "Batch Settings"
+
+msgid "Apply to all files"
+msgstr "Apply to all files"
+
+msgid "Auto Detect"
+msgstr "Auto Detect"
+
+msgid "Report Period"
+msgstr "Report Period"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Register"
+msgstr "Register"
+
+msgid "Contact Us"
+msgstr "Contact Us"
+
+msgid "Month"
+msgstr "Month"

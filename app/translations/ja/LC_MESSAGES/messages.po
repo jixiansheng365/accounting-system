@@ -1,0 +1,720 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+
+# システム共通
+msgid "Accounting Customer Management System"
+msgstr "代理記帳顧客管理システム"
+
+msgid "Smart Bookkeeping"
+msgstr "スマート記帳"
+
+msgid "Home"
+msgstr "ホーム"
+
+msgid "Login"
+msgstr "ログイン"
+
+msgid "Logout"
+msgstr "ログアウト"
+
+msgid "Register"
+msgstr "登録"
+
+msgid "Username"
+msgstr "ユーザー名"
+
+msgid "Password"
+msgstr "パスワード"
+
+msgid "Email"
+msgstr "メールアドレス"
+
+msgid "Phone"
+msgstr "電話番号"
+
+msgid "Submit"
+msgstr "送信"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Edit"
+msgstr "編集"
+
+msgid "Create"
+msgstr "作成"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "Filter"
+msgstr "絞り込み"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Status"
+msgstr "ステータス"
+
+msgid "Created At"
+msgstr "作成日時"
+
+msgid "Updated At"
+msgstr "更新日時"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Back"
+msgstr "戻る"
+
+msgid "Confirm"
+msgstr "確認"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Error"
+msgstr "エラー"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Loading"
+msgstr "読み込み中"
+
+msgid "No data"
+msgstr "データがありません"
+
+# ログインページ
+msgid "User Login"
+msgstr "ユーザーログイン"
+
+msgid "Welcome back, please login to your account"
+msgstr "お帰りなさい。アカウントにログインしてください"
+
+msgid "Customer Code"
+msgstr "顧客コード"
+
+msgid "Enter customer code"
+msgstr "顧客コードを入力してください"
+
+msgid "Enter password"
+msgstr "パスワードを入力してください"
+
+msgid "Forgot password"
+msgstr "パスワードを忘れた場合"
+
+msgid "Contact accounting firm"
+msgstr "会計事務所に連絡"
+
+# 言語選択
+msgid "Simplified Chinese"
+msgstr "簡体字中国語"
+
+msgid "Traditional Chinese"
+msgstr "繁体字中国語"
+
+msgid "Japanese"
+msgstr "日本語"
+
+msgid "Korean"
+msgstr "韓国語"
+
+msgid "English"
+msgstr "English"
+
+# ホームページ
+msgid "Professional Bookkeeping Services"
+msgstr "プロの代理記帳サービス"
+
+msgid "We provide efficient and accurate bookkeeping services for Japanese enterprises, supporting multilingual communication."
+msgstr "日系企業向けに効率的で正確な代理記帳サービスを提供し、多言語対応をサポートしています。"
+
+msgid "Get Started"
+msgstr "始める"
+
+msgid "Learn More"
+msgstr "詳しく見る"
+
+msgid "Our Services"
+msgstr "サービス内容"
+
+msgid "Comprehensive bookkeeping and financial management services"
+msgstr "包括的な記帳と財務管理サービス"
+
+msgid "Professional Bookkeeping"
+msgstr "プロの記帳代行"
+
+msgid "Accurate and timely bookkeeping services"
+msgstr "正確で迅速な記帳サービス"
+
+msgid "Financial Reports"
+msgstr "財務報告書"
+
+msgid "Detailed financial statements and analysis"
+msgstr "詳細な財務諸表と分析"
+
+msgid "Tax Consultation"
+msgstr "税務相談"
+
+msgid "Professional tax planning and filing"
+msgstr "プロの税務計画と申告"
+
+msgid "Compliance Management"
+msgstr "コンプライアンス管理"
+
+msgid "Ensure compliance with all regulations"
+msgstr "すべての規制への準拠を確保"
+
+msgid "Why Choose Us"
+msgstr "選ばれる理由"
+
+msgid "We specialize in professional bookkeeping services for Japanese enterprises with extensive experience and expert team."
+msgstr "豊富な経験と専門チームを持ち、日系企業向けのプロの記帳サービスに特化しています。"
+
+msgid "Multi-language Support (CN/TW/JP/EN/KR)"
+msgstr "多言語対応（中/繁/日/英/韓）"
+
+msgid "24/7 Online Access"
+msgstr "24時間365日オンラインアクセス"
+
+msgid "Secure Data Storage"
+msgstr "安全なデータ保管"
+
+msgid "Ready to streamline your bookkeeping?"
+msgstr "記帳業務を効率化する準備はできましたか？"
+
+msgid "Contact us today for a free consultation and learn how we can help your business."
+msgstr "今日までに無料相談にお問い合わせいただき、お客様のビジネスにおけるサポート方法をご確認ください。"
+
+msgid "Contact Sales"
+msgstr "営業に連絡"
+
+msgid "View Pricing"
+msgstr "料金を見る"
+
+msgid "About Us"
+msgstr "会社概要"
+
+msgid "Services"
+msgstr "サービス"
+
+msgid "Pricing"
+msgstr "料金"
+
+msgid "Contact"
+msgstr "お問い合わせ"
+
+msgid "Contact Information"
+msgstr "連絡先"
+
+msgid "All rights reserved"
+msgstr "All rights reserved"
+
+# 顧客ダッシュボード
+msgid "Accounting Portal"
+msgstr "会計ポータル"
+
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+msgid "Report Query"
+msgstr "帳票検索"
+
+msgid "Monthly Reports"
+msgstr "月次報告書"
+
+msgid "Login History"
+msgstr "ログイン履歴"
+
+msgid "Welcome back"
+msgstr "お帰りなさい"
+
+msgid "You have"
+msgstr ""
+
+msgid "new reports"
+msgstr "件の新着報告書があります"
+
+msgid "View All"
+msgstr "すべて表示"
+
+msgid "Recent Reports"
+msgstr "最近の報告書"
+
+msgid "Report Type"
+msgstr "帳票種別"
+
+msgid "Period"
+msgstr "期間"
+
+msgid "Date"
+msgstr "日付"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Download"
+msgstr "ダウンロード"
+
+msgid "Quick Actions"
+msgstr "クイックアクション"
+
+msgid "Query Reports"
+msgstr "帳票を検索"
+
+msgid "View Records"
+msgstr "履歴を見る"
+
+msgid "System Status"
+msgstr "システム状態"
+
+msgid "System Running"
+msgstr "システム稼働中"
+
+msgid "Data Sync"
+msgstr "データ同期"
+
+msgid "Service Status"
+msgstr "サービス状態"
+
+msgid "Normal"
+msgstr "正常"
+
+msgid "Online"
+msgstr "オンライン"
+
+msgid "Detail Ledger"
+msgstr "明細帳"
+
+msgid "Profit Statement"
+msgstr "損益計算書"
+
+msgid "Balance Sheet"
+msgstr "貸借対照表"
+
+msgid "Monthly Report"
+msgstr "月次報告書"
+
+msgid "Completed"
+msgstr "完了"
+
+msgid "All"
+msgstr "すべて"
+
+msgid "Please select reports to download"
+msgstr "ダウンロードする報告書を選択してください"
+
+msgid "Year"
+msgstr "年"
+
+msgid "Month"
+msgstr "月"
+
+# 管理ダッシュボード追加翻訳
+msgid "This is your system overview"
+msgstr "これはあなたのシステム概要です"
+
+msgid "Total Customers"
+msgstr "顧客総数"
+
+msgid "New This Month"
+msgstr "今月の新規"
+
+msgid "Uploaded This Month"
+msgstr "今月のアップロード"
+
+msgid "Pending Uploads"
+msgstr "保留中のアップロード"
+
+msgid "Waiting for processing"
+msgstr "処理待ち"
+
+msgid "Active Today"
+msgstr "本日のアクティブ"
+
+msgid "Customers logged in today"
+msgstr "本日ログインした顧客"
+
+msgid "Select year"
+msgstr "年を選択"
+
+msgid "Select month"
+msgstr "月を選択"
+
+msgid "All Types"
+msgstr "すべての種類"
+
+msgid "Query"
+msgstr "検索"
+
+msgid "Reset"
+msgstr "リセット"
+
+msgid "No reports found"
+msgstr "報告書が見つかりません"
+
+msgid "Report List"
+msgstr "報告書一覧"
+
+msgid "File Name"
+msgstr "ファイル名"
+
+msgid "File Size"
+msgstr "ファイルサイズ"
+
+msgid "Upload Date"
+msgstr "アップロード日"
+
+msgid "Preview"
+msgstr "プレビュー"
+
+msgid "of"
+msgstr "/"
+
+msgid "items"
+msgstr "件"
+
+msgid "Previous"
+msgstr "前へ"
+
+msgid "Next"
+msgstr "次へ"
+
+msgid "Customer"
+msgstr "顧客"
+
+# 管理画面
+msgid "Admin Dashboard"
+msgstr "管理ダッシュボード"
+
+msgid "Customer Management"
+msgstr "顧客管理"
+
+msgid "Report Management"
+msgstr "報告書管理"
+
+msgid "Upload Report"
+msgstr "報告書をアップロード"
+
+msgid "System Settings"
+msgstr "システム設定"
+
+msgid "System Logs"
+msgstr "システムログ"
+
+msgid "Admin"
+msgstr "管理者"
+
+msgid "Total Reports"
+msgstr "報告書総数"
+
+msgid "This Month New"
+msgstr "今月の新着"
+
+msgid "Recent Customers"
+msgstr "最近の顧客"
+
+msgid "Add Customer"
+msgstr "顧客を追加"
+
+msgid "Customer Name"
+msgstr "顧客名"
+
+msgid "Contact Person"
+msgstr "担当者"
+
+msgid "Address"
+msgstr "住所"
+
+msgid "Operations"
+msgstr "操作"
+
+msgid "View"
+msgstr "表示"
+
+msgid "Are you sure?"
+msgstr "よろしいですか？"
+
+msgid "Total"
+msgstr "合計"
+
+msgid "records"
+msgstr "件"
+
+msgid "Upload"
+msgstr "アップロード"
+
+msgid "Select Customer"
+msgstr "顧客を選択"
+
+msgid "Select File"
+msgstr "ファイルを選択"
+
+msgid "Drag and drop files here or click to select"
+msgstr "ファイルをドラッグ＆ドロップするか、クリックして選択してください"
+
+msgid "Supported formats: PDF, Excel, Word"
+msgstr "対応形式：PDF、Excel、Word"
+
+msgid "Uploading"
+msgstr "アップロード中"
+
+msgid "Upload Success"
+msgstr "アップロード成功"
+
+msgid "Upload Failed"
+msgstr "アップロード失敗"
+
+# 認証関連
+msgid "Login successful"
+msgstr "ログイン成功"
+
+msgid "Logout successful"
+msgstr "ログアウト成功"
+
+msgid "Username and password are required"
+msgstr "ユーザー名とパスワードが必要です"
+
+msgid "Invalid username or password"
+msgstr "ユーザー名またはパスワードが無効です"
+
+msgid "Account has been disabled"
+msgstr "アカウントが無効になっています"
+
+msgid "Not logged in"
+msgstr "ログインしていません"
+
+msgid "User not found"
+msgstr "ユーザーが見つかりません"
+
+msgid "Registration successful"
+msgstr "登録成功"
+
+msgid "Username already exists"
+msgstr "ユーザー名は既に存在します"
+
+msgid "Email already exists"
+msgstr "メールアドレスは既に存在します"
+
+msgid "Username, email and password are required"
+msgstr "ユーザー名、メールアドレス、パスワードが必要です"
+
+msgid "Password changed successfully"
+msgstr "パスワードが正常に変更されました"
+
+msgid "Old password and new password are required"
+msgstr "古いパスワードと新しいパスワードが必要です"
+
+msgid "Invalid old password"
+msgstr "古いパスワードが無効です"
+
+msgid "Last Login Time"
+msgstr "前回のログイン時刻"
+
+msgid "IP Address"
+msgstr "IPアドレス"
+
+msgid "User Agent"
+msgstr "ユーザーエージェント"
+
+msgid "Login Time"
+msgstr "ログイン時刻"
+
+msgid "Logout Time"
+msgstr "ログアウト時刻"
+
+msgid "Real Name"
+msgstr "本名"
+
+msgid "Role"
+msgstr "役割"
+
+msgid "Active"
+msgstr "有効"
+
+msgid "Inactive"
+msgstr "無効"
+
+msgid "User List"
+msgstr "ユーザー一覧"
+
+msgid "Add User"
+msgstr "ユーザーを追加"
+
+msgid "Edit User"
+msgstr "ユーザーを編集"
+
+msgid "Accountant"
+msgstr "会計士"
+
+msgid "Manager"
+msgstr "マネージャー"
+
+msgid "Administrator"
+msgstr "管理者"
+
+msgid "Last Login"
+msgstr "前回のログイン"
+
+msgid "Never"
+msgstr "なし"
+
+msgid "Reports"
+msgstr "報告書"
+
+msgid "Users"
+msgstr "ユーザー"
+
+msgid "Customers"
+msgstr "顧客"
+
+msgid "CN"
+msgstr "中"
+
+msgid "TW"
+msgstr "繁"
+
+msgid "JP"
+msgstr "日"
+
+msgid "KR"
+msgstr "韓"
+
+msgid "EN"
+msgstr "英"
+
+# 追加翻訳
+msgid "Total Logins"
+msgstr "総ログイン回数"
+
+msgid "Successful Logins"
+msgstr "成功ログイン"
+
+msgid "Failed Logins"
+msgstr "失敗ログイン"
+
+msgid "Recent Login Activities"
+msgstr "最近のログイン活動"
+
+msgid "Date Time"
+msgstr "日時"
+
+msgid "Location"
+msgstr "場所"
+
+msgid "Device"
+msgstr "デバイス"
+
+msgid "Unknown"
+msgstr "不明"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Failed"
+msgstr "失敗"
+
+msgid "No login history records"
+msgstr "ログイン履歴がありません"
+
+msgid "View your recent login activities and security information"
+msgstr "最近のログイン活動とセキュリティ情報を確認"
+
+msgid "Report Name"
+msgstr "報告書名"
+
+msgid "Download Count"
+msgstr "ダウンロード回数"
+
+msgid "View and manage all your monthly reports"
+msgstr "すべての月次報告書を表示・管理"
+
+msgid "Search and download your financial reports"
+msgstr "財務報告書を検索・ダウンロード"
+
+msgid "Filter Reports"
+msgstr "報告書を絞り込む"
+
+msgid "Quick Filter"
+msgstr "クイックフィルター"
+
+msgid "Last 3 Months"
+msgstr "過去3ヶ月"
+
+msgid "Last 6 Months"
+msgstr "過去6ヶ月"
+
+msgid "Last Year"
+msgstr "過去1年"
+
+msgid "Search Results"
+msgstr "検索結果"
+
+msgid "Bulk Download"
+msgstr "一括ダウンロード"
+
+msgid "vs Last Month"
+msgstr "先月比"
+
+msgid "Filter by period"
+msgstr "期間で絞り込む"
+
+msgid "Settings"
+msgstr "設定"
+
+# 管理画面追加翻訳
+msgid "Upload financial reports for customers"
+msgstr "顧客向けに財務報告書をアップロード"
+
+msgid "Files to Upload"
+msgstr "アップロードするファイル"
+
+msgid "Clear All"
+msgstr "すべてクリア"
+
+msgid "Files"
+msgstr "ファイル数"
+
+msgid "Total Size"
+msgstr "合計サイズ"
+
+msgid "Uploaded"
+msgstr "アップロード済み"
+
+msgid "Start Upload"
+msgstr "アップロード開始"
+
+msgid "Batch Settings"
+msgstr "一括設定"
+
+msgid "Apply to all files"
+msgstr "すべてのファイルに適用"
+
+msgid "Auto Detect"
+msgstr "自動検出"
+
+msgid "Report Period"
+msgstr "報告期間"
+
+msgid "Home"
+msgstr "ホーム"
+
+msgid "Register"
+msgstr "登録"
+
+msgid "Contact Us"
+msgstr "お問い合わせ"
+
+msgid "Month"
+msgstr "月"

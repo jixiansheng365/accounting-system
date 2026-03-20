@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'zh_CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}管理后台{% endblock %} - 代理记账系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+    <style>
+        /* Admin 特定样式 - 统一开发规范 */
+        :root {
+            --primary: #0d6efd;
+            --primary-dark: #0b5ed7;
+            --primary-light: #cfe2ff;
+            --gray-600: #6c757d;
+            --success: #28a745;
+            --radius: 12px;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* modern-box 卡片样式 */
+        .modern-box {
+            background: #fff !important;
+            border-radius: 12px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+            padding: 24px !important;
+            margin-bottom: 24px !important;
+            border: none !important;
+        }
+
+        /* modern-title 标题样式 */
+        .modern-title {
+            font-size: 20px !important;
+            font-weight: 600 !important;
+            color: #212529 !important;
+            margin-bottom: 20px !important;
+            border-left: 4px solid #0d6efd !important;
+            padding-left: 12px !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modern-title i {
+            color: #0d6efd;
+        }
+
+        /* 深色侧边栏 - Firefly III 风格 */
+        .sidebar {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+        }
+
+        .sidebar-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .brand-icon {
+            background: rgba(13, 110, 253, 0.2) !important;
+            border: 2px solid rgba(13, 110, 253, 0.3) !important;
+        }
+
+        .nav-section-title {
+            color: #6c757d !important;
+        }
+
+        .nav-link {
+            color: #adb5bd !important;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #fff !important;
+        }
+
+        .nav-link.active {
+            background: #0d6efd !important;
+            color: #fff !important;
+        }
+
+        /* 底部用户区域 */
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-decoration: none;
+        }
+
+        .user-menu:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        /* 阴影退出按钮 */
+        .btn-logout {
+            width: 36px;
+            height: 36px;
+            background: rgba(220, 53, 69, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+            text-decoration: none;
+        }
+
+        .btn-logout:hover {
+            background: rgba(220, 53, 69, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+            color: #dc3545;
+        }
+
+        /* 返回按钮 */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .btn-back i {
+            font-size: 12px;
+        }
+
+        /* 表格操作按钮 */
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+        }
+
+        .btn-icon.btn-edit {
+            background: #cffafe;
+            color: #06b6d4;
+        }
+
+        .btn-icon.btn-edit:hover {
+            background: #06b6d4;
+            color: white;
+        }
+
+        .btn-icon.btn-delete {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .btn-icon.btn-delete:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-icon.btn-view {
+            background: #d1fae5;
+            color: #28a745;
+        }
+
+        .btn-icon.btn-view:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        /* 分页样式 */
+        .pagination-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-top: 1px solid #e9ecef;
+            margin-top: 16px;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #fff;
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .page-link:hover {
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .page-item.active .page-link {
+            background: #0d6efd;
+            border-color: #0d6efd;
+            color: white;
+        }
+
+        .page-item.disabled .page-link {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 表单样式 */
+        .admin-form .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+
+        .admin-form .form-control {
+            height: 44px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .admin-form .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .admin-form .form-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb-wrapper {
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb-item a {
+            color: #6c757d;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            color: #0d6efd;
+        }
+
+        .breadcrumb-item.active {
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .breadcrumb-separator {
+            color: #adb5bd;
+        }
+
+        /* 页面头部操作区 */
+        .page-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-header-actions .page-title {
+            margin-bottom: 0;
+        }
+
+        /* Toast 通知 */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .admin-toast {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .toast-icon.success {
+            background: #d1fae5;
+            color: #28a745;
+        }
+
+        .toast-icon.error {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-desc {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        /* 按钮阴影效果 */
+        .btn-primary {
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 16px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn-success {
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-shield-halved" style="color: #0d6efd;"></i>
+                    </div>
+                    <div>
+                        <div class="brand-text">{{ _('Accounting Customer Management System') }}</div>
+                        <div class="brand-subtitle">{{ _('Admin Dashboard') }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.dashboard', lang=session.get('lang', 'zh_CN')) }}" class="nav-link {% if active_menu == 'dashboard' %}active{% endif %}">
+                                <span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+                                <span>{{ _('Dashboard') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.customers_page', lang=session.get('lang', 'zh_CN')) }}" class="nav-link {% if active_menu == 'customers' %}active{% endif %}">
+                                <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
+                                <span>{{ _('Customer Management') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.reports_page', lang=session.get('lang', 'zh_CN')) }}" class="nav-link {% if active_menu == 'reports' %}active{% endif %}">
+                                <span class="nav-icon"><i class="fa-solid fa-folder-open"></i></span>
+                                <span>{{ _('Report Management') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.upload_page', lang=session.get('lang', 'zh_CN')) }}" class="nav-link {% if active_menu == 'upload' %}active{% endif %}">
+                                <span class="nav-icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                                <span>{{ _('Upload Report') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.settings_page', lang=session.get('lang', 'zh_CN')) }}" class="nav-link {% if active_menu == 'settings' %}active{% endif %}">
+                                <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+                                <span>{{ _('System Settings') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.logs_page', lang=session.get('lang', 'zh_CN')) }}" class="nav-link {% if active_menu == 'logs' %}active{% endif %}">
+                                <span class="nav-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+                                <span>{{ _('System Logs') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ session.get('admin_username', 'Admin') }}</div>
+                        <div class="user-role">{{ _('Administrator') }}</div>
+                    </div>
+                    <a href="{{ url_for('admin.admin_logout', lang=session.get('lang', 'zh_CN')) }}" class="btn-logout" title="{{ _('Logout') }}">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-search">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="search-input" placeholder="搜索..." id="globalSearch">
+                </div>
+                <div class="header-actions">
+                    <div class="language-switcher" style="display: flex; gap: 8px; margin-right: 16px;">
+                        <a href="?lang=zh_CN" class="{% if session.get('lang') == 'zh_CN' or not session.get('lang') %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">简</a>
+                        <a href="?lang=zh_TW" class="{% if session.get('lang') == 'zh_TW' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">繁</a>
+                        <a href="?lang=ja" class="{% if session.get('lang') == 'ja' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">日</a>
+                        <a href="?lang=ko" class="{% if session.get('lang') == 'ko' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">韩</a>
+                        <a href="?lang=en" class="{% if session.get('lang') == 'en' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">EN</a>
+                    </div>
+                    <button class="header-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge"></span>
+                    </button>
+                    <button class="header-btn" onclick="window.location.href='{{ url_for('admin.admin_logout') }}'">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="page-content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast 容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toast 通知函数
+        function showToast(title, message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'admin-toast';
+            const icon = type === 'success' ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark"></i>';
+            toast.innerHTML = `
+                <div class="toast-icon ${type}">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 全局搜索
+        $(document).ready(function() {
+            $('#globalSearch').on('keypress', function(e) {
+                if (e.which === 13) {
+                    const query = $(this).val();
+                    if (query) {
+                        window.location.href = '{{ url_for('admin.customers_page') }}?search=' + encodeURIComponent(query);
+                    }
+                }
+            });
+        });
+
+        // 确认删除
+        function confirmDelete(message, callback) {
+            if (confirm(message || '确定要删除此项吗？')) {
+                callback();
+            }
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录历史 - 代理记账客户管理系统</title>
+    <!-- Bootstrap5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+    <!-- Font Awesome 6 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <style>
+        /* 返回按钮样式 */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .back-button:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(13, 110, 253, 0.4);
+        }
+
+        .back-button i {
+            font-size: 16px;
+        }
+
+        /* 用户头像样式 */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(13, 110, 253, 0.4);
+        }
+
+        /* 退出按钮样式 */
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #bb2d3b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+
+        /* 侧边栏底部用户区域 */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .user-menu:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* 统计卡片 - modern-box 风格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .modern-box {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .modern-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 16px;
+        }
+
+        .stat-icon-box.blue {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+
+        .stat-icon-box.green {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .stat-icon-box.red {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        /* 页面标题 */
+        .modern-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 24px;
+        }
+
+        /* 表格卡片 */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-card-body {
+            padding: 0;
+        }
+
+        /* DataTables 自定义样式 */
+        .dataTables_wrapper {
+            padding: 16px 24px 24px;
+        }
+
+        .dataTables_length select {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            padding: 6px 12px;
+        }
+
+        .dataTables_filter input {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            padding: 6px 12px;
+        }
+
+        .dataTables_filter input:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            outline: none;
+        }
+
+        table.dataTable {
+            border-collapse: collapse !important;
+            margin-top: 16px !important;
+        }
+
+        table.dataTable thead th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        table.dataTable tbody td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #212529;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        table.dataTable tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dataTables_info {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .dataTables_paginate .paginate_button {
+            border-radius: 8px !important;
+            padding: 6px 12px !important;
+            margin: 0 2px !important;
+        }
+
+        .dataTables_paginate .paginate_button.current {
+            background-color: #0d6efd !important;
+            color: white !important;
+            border-color: #0d6efd !important;
+        }
+
+        .dataTables_paginate .paginate_button:hover {
+            background-color: #e9ecef !important;
+            border-color: #dee2e6 !important;
+        }
+
+        /* 状态徽章 */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .status-badge.danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        /* 设备信息 */
+        .device-info {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #6c757d;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            color: #dee2e6;
+        }
+
+        .empty-text {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局响应式容器 -->
+    <div class="container-fluid px-3 px-md-4">
+        <div class="dashboard-wrapper">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div>
+                        <div class="brand-text">代理记账系统</div>
+                        <div class="brand-subtitle">客户门户</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.dashboard') }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                                <span>{{ _('Dashboard') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.query_reports') }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-folder-open"></i></span>
+                                <span>{{ _('Report Query') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.list_reports') }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                                <span>{{ _('Monthly Reports') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.login_history') }}" class="nav-link active">
+                                <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                                <span>{{ _('Login History') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+                                <span>{{ _('Settings') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 底部用户区域 -->
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ session.get('username', _('Customer')) }}</div>
+                        <div class="user-role">{{ _('Customer') }}</div>
+                    </div>
+                    <a href="{{ url_for('auth.logout_page') }}" class="logout-btn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        {{ _('Logout') }}
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-search">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="search-input" placeholder="搜索报表、文档...">
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge"></span>
+                    </button>
+                    <button class="header-btn"><i class="fa-solid fa-circle-question"></i></button>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="page-content">
+                <!-- 返回按钮 -->
+                <button class="back-button" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    {{ _('Back') }}
+                </button>
+
+                <!-- 页面标题 -->
+                <h1 class="modern-title">{{ _('Login History') }}</h1>
+                <p class="page-subtitle">{{ _('View your recent login activities and security information') }}</p>
+
+                <!-- 统计卡片 -->
+                <div class="stats-grid">
+                    <div class="modern-box">
+                        <div class="stat-icon-box blue">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="stat-value">{{ login_logs|length }}</div>
+                        <div class="stat-label">{{ _('Total Logins') }}</div>
+                    </div>
+                    <div class="modern-box">
+                        <div class="stat-icon-box green">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div class="stat-value">{{ login_logs|selectattr('success')|list|length }}</div>
+                        <div class="stat-label">{{ _('Successful Logins') }}</div>
+                    </div>
+                    <div class="modern-box">
+                        <div class="stat-icon-box red">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
+                        <div class="stat-value">{{ login_logs|rejectattr('success')|list|length }}</div>
+                        <div class="stat-label">{{ _('Failed Logins') }}</div>
+                    </div>
+                </div>
+
+                <!-- 登录历史表格 -->
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h3 class="table-card-title">
+                            <i class="fa-solid fa-list-ul"></i>
+                            {{ _('Recent Login Activities') }}
+                        </h3>
+                    </div>
+                    <div class="table-card-body">
+                        {% if login_logs %}
+                        <table class="table" id="loginHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>{{ _('Date Time') }}</th>
+                                    <th>{{ _('IP Address') }}</th>
+                                    <th>{{ _('Location') }}</th>
+                                    <th>{{ _('Status') }}</th>
+                                    <th>{{ _('Device') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in login_logs %}
+                                <tr>
+                                    <td>{{ log.login_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    <td>{{ log.ip_address }}</td>
+                                    <td>{{ log.location or _('Unknown') }}</td>
+                                    <td>
+                                        {% if log.success %}
+                                        <span class="status-badge success">
+                                            <i class="fa-solid fa-check"></i>
+                                            {{ _('Success') }}
+                                        </span>
+                                        {% else %}
+                                        <span class="status-badge danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                            {{ _('Failed') }}
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="device-info" title="{{ log.user_agent }}">{{ log.user_agent[:40] }}...</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                            <p class="empty-text">{{ _('No login history records') }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+    <!-- Bootstrap5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loginHistoryTable').DataTable({
+                language: {
+                    search: "搜索：",
+                    lengthMenu: "每页显示 _MENU_ 条",
+                    info: "显示第 _START_ 至 _END_ 条，共 _TOTAL_ 条",
+                    infoEmpty: "暂无数据",
+                    infoFiltered: "（从 _MAX_ 条中筛选）",
+                    paginate: {
+                        first: "首页",
+                        last: "末页",
+                        next: "下一页",
+                        previous: "上一页"
+                    },
+                    emptyTable: "暂无数据",
+                    zeroRecords: "未找到匹配记录"
+                },
+                pageLength: 10,
+                order: [[0, 'desc']]
+            });
+        });
+    </script>
+</body>
+</html>

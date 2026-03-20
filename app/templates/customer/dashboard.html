@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'zh_CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Dashboard') }} - {{ _('Accounting Customer Management System') }}</title>
+    <!-- Bootstrap5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 返回按钮样式 */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .back-button i {
+            font-size: 16px;
+        }
+        
+        /* 用户头像样式 */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 退出按钮样式 */
+        .logout-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* 侧边栏底部用户区域 */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局响应式容器 -->
+    <div class="container-fluid px-3 px-md-4">
+        <div class="dashboard-wrapper">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div>
+                        <div class="brand-text">{{ _('Accounting Customer Management System') }}</div>
+                        <div class="brand-subtitle">{{ _('Accounting Portal') }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.dashboard', lang=session.get('lang', 'zh_CN')) }}" class="nav-link active">
+                                <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                                <span>{{ _('Dashboard') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.query_reports', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-folder-open"></i></span>
+                                <span>{{ _('Report Query') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.list_reports', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                                <span>{{ _('Monthly Reports') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.login_history', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                                <span>{{ _('Login History') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- 改进的底部用户区域 -->
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ session.get('username', _('Customer')) }}</div>
+                        <div class="user-role">{{ _('Customer') }}</div>
+                    </div>
+                    <a href="{{ url_for('auth.logout_page') }}" class="logout-btn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        {{ _('Logout') }}
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-search">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="search-input" placeholder="{{ _('Search') }}...">
+                </div>
+                <div class="header-actions">
+                    <div class="language-switcher" style="display: flex; gap: 8px; margin-right: 16px; align-items: center;">
+                        <a href="?lang=zh_CN" class="{% if session.get('lang') == 'zh_CN' or not session.get('lang') %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">简</a>
+                        <a href="?lang=zh_TW" class="{% if session.get('lang') == 'zh_TW' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">繁</a>
+                        <a href="?lang=ja" class="{% if session.get('lang') == 'ja' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">日</a>
+                        <a href="?lang=ko" class="{% if session.get('lang') == 'ko' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">韩</a>
+                        <a href="?lang=en" class="{% if session.get('lang') == 'en' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">EN</a>
+                    </div>
+                    <button class="header-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge"></span>
+                    </button>
+                    <button class="header-btn"><i class="fa-solid fa-circle-question"></i></button>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="page-content">
+                <!-- 返回按钮 -->
+                <button class="back-button" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    {{ _('Back') }}
+                </button>
+                
+                <!-- 页面标题 -->
+                <div class="page-header">
+                    <h1 class="page-title">{{ _('Dashboard') }}</h1>
+                    <p class="page-subtitle">{{ _('Welcome back') }}，{{ customer.company_name if customer else _('Customer') }}！{{ _('You have') }} {{ unread_count }} {{ _('new reports') }}</p>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">{{ _('Total Reports') }}</span>
+                            <div class="stat-icon blue"><i class="fa-solid fa-chart-pie"></i></div>
+                        </div>
+                        <div class="stat-value">{{ total_reports }}</div>
+                        <div class="stat-change up">
+                            <span class="change-icon"><i class="fa-solid fa-arrow-up"></i></span>
+                            <span class="change-text">12%</span>
+                            <span class="change-period">vs {{ _('Last Month') }}</span>
+                        </div>
+                    </div>
+
+                    <a href="{{ url_for('reports.list_reports', lang=session.get('lang', 'zh_CN')) }}" class="stat-card" style="text-decoration: none; color: inherit;">
+                        <div class="stat-header">
+                            <span class="stat-label">{{ _('Monthly Reports') }}</span>
+                            <div class="stat-icon green"><i class="fa-solid fa-file-lines"></i></div>
+                        </div>
+                        <div class="stat-value">{{ monthly_reports }}</div>
+                        <div class="stat-change up">
+                            <span class="change-icon"><i class="fa-solid fa-arrow-up"></i></span>
+                            <span class="change-text">8%</span>
+                            <span class="change-period">vs {{ _('Last Month') }}</span>
+                        </div>
+                    </a>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">{{ _('Balance Sheet') }}</span>
+                            <div class="stat-icon orange"><i class="fa-solid fa-scale-balanced"></i></div>
+                        </div>
+                        <div class="stat-value">{{ balance_sheets }}</div>
+                        <div class="stat-change down">
+                            <span class="change-icon"><i class="fa-solid fa-arrow-down"></i></span>
+                            <span class="change-text">3%</span>
+                            <span class="change-period">vs {{ _('Last Month') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">{{ _('This Month New') }}</span>
+                            <div class="stat-icon red"><i class="fa-solid fa-calendar-check"></i></div>
+                        </div>
+                        <div class="stat-value">{{ this_month_reports }}</div>
+                        <div class="stat-change up">
+                            <span class="change-icon"><i class="fa-solid fa-arrow-up"></i></span>
+                            <span class="change-text">20%</span>
+                            <span class="change-period">vs {{ _('Last Month') }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 内容网格 -->
+                <div class="content-grid">
+                    <!-- 左侧：最近报表表格 -->
+                    <div class="content-main">
+                        <!-- 最近报表表格 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa-solid fa-list"></i> {{ _('Recent Reports') }}</h3>
+                                <a href="{{ url_for('reports.query_reports', lang=session.get('lang', 'zh_CN')) }}" class="btn btn-sm btn-ghost">{{ _('View All') }} <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                            <div class="card-body">
+                                {% if recent_reports %}
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ _('Report Type') }}</th>
+                                            <th>{{ _('Period') }}</th>
+                                            <th>{{ _('Date') }}</th>
+                                            <th>{{ _('Status') }}</th>
+                                            <th>{{ _('Action') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for report in recent_reports %}
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    {% if report.report_type == 'monthly' %}{{ _('Monthly Report') }}
+                                                    {% elif report.report_type == 'balance_sheet' %}{{ _('Balance Sheet') }}
+                                                    {% elif report.report_type == 'income_statement' %}{{ _('Profit Statement') }}
+                                                    {% elif report.report_type == 'detail_ledger' %}{{ _('Detail Ledger') }}
+                                                    {% else %}{{ report.report_type_name }}
+                                                    {% endif %}
+                                                </strong>
+                                            </td>
+                                            <td>{{ report.report_period }}</td>
+                                            <td>{{ report.upload_date }}</td>
+                                            <td>
+                                                <span class="status-badge success">{{ _('Completed') }}</span>
+                                            </td>
+                                            <td>
+                                                <a href="{{ url_for('reports.download_report', report_id=report.id) }}" class="btn btn-sm btn-primary">
+                                                    <i class="fa-solid fa-download"></i> {{ _('Download') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <div class="empty-state">
+                                    <div class="empty-icon">📁</div>
+                                    <p>{{ _('No reports found') }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：快捷操作 -->
+                    <div class="content-sidebar">
+                        <!-- 快捷操作卡片 -->
+                        <div class="card" style="margin-bottom: 24px;">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa-solid fa-bolt"></i> {{ _('Quick Actions') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="quick-actions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <a href="{{ url_for('reports.query_reports', lang=session.get('lang', 'zh_CN')) }}" class="quick-action-btn" style="display: flex; flex-direction: column; align-items: center; padding: 20px 12px; border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 1px solid #dee2e6; text-decoration: none; transition: all 0.3s ease;">
+                                        <span class="quick-action-icon blue" style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);"><i class="fa-solid fa-magnifying-glass" style="font-size: 20px; color: white;"></i></span>
+                                        <div class="quick-action-text" style="text-align: center;">
+                                            <div class="quick-action-title" style="font-size: 14px; font-weight: 600; color: #212529; margin-bottom: 4px;">{{ _('Query Reports') }}</div>
+                                            <div class="quick-action-desc" style="font-size: 12px; color: #6c757d;">{{ _('Filter by period') }}</div>
+                                        </div>
+                                    </a>
+                                    <a href="{{ url_for('reports.login_history', lang=session.get('lang', 'zh_CN')) }}" class="quick-action-btn" style="display: flex; flex-direction: column; align-items: center; padding: 20px 12px; border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 1px solid #dee2e6; text-decoration: none; transition: all 0.3s ease;">
+                                        <span class="quick-action-icon green" style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);"><i class="fa-solid fa-clock-rotate-left" style="font-size: 20px; color: white;"></i></span>
+                                        <div class="quick-action-text" style="text-align: center;">
+                                            <div class="quick-action-title" style="font-size: 14px; font-weight: 600; color: #212529; margin-bottom: 4px;">{{ _('Login History') }}</div>
+                                            <div class="quick-action-desc" style="font-size: 12px; color: #6c757d;">{{ _('View Records') }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 系统状态卡片 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fa-solid fa-server"></i> {{ _('System Status') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="system-status">
+                                    <div class="status-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                                        <span style="font-size: 14px; color: #495057;">{{ _('System Running') }}</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 14px; color: #28a745; font-weight: 500;">{{ _('Normal') }}</span>
+                                            <span style="width: 10px; height: 10px; background-color: #28a745; border-radius: 50%; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="status-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                                        <span style="font-size: 14px; color: #495057;">{{ _('Data Sync') }}</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 14px; color: #28a745; font-weight: 500;">{{ _('Normal') }}</span>
+                                            <span style="width: 10px; height: 10px; background-color: #28a745; border-radius: 50%; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="status-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0;">
+                                        <span style="font-size: 14px; color: #495057;">{{ _('Service Status') }}</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 14px; color: #28a745; font-weight: 500;">{{ _('Online') }}</span>
+                                            <span style="width: 10px; height: 10px; background-color: #28a745; border-radius: 50%; display: inline-block;"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+    <!-- Bootstrap5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

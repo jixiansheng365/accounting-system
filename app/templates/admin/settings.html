@@ -1,0 +1,161 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ _('System Settings') }}{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">{{ _('Dashboard') }}</a></li>
+            <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right"></i></li>
+            <li class="breadcrumb-item active">{{ _('System Settings') }}</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header-actions">
+    <h1 class="modern-title">
+        <i class="fa-solid fa-gear"></i>
+        {{ _('System Settings') }}
+    </h1>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="modern-box">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-3">
+                        <i class="fa-solid fa-users text-primary fs-4"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="text-muted mb-1">{{ _('Total Users') }}</h6>
+                    <h3 class="mb-0">{{ total_users }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="modern-box">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                        <i class="fa-solid fa-user-check text-success fs-4"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="text-muted mb-1">{{ _('Active Users') }}</h6>
+                    <h3 class="mb-0">{{ active_users }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="modern-box">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-3">
+                        <i class="fa-solid fa-user-shield text-warning fs-4"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="text-muted mb-1">{{ _('Admin Users') }}</h6>
+                    <h3 class="mb-0">{{ admin_users }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 系统配置信息 -->
+<div class="modern-box">
+    <h5 class="mb-4">
+        <i class="fa-solid fa-server me-2 text-primary"></i>
+        {{ _('System Configuration') }}
+    </h5>
+    
+    <div class="table-responsive">
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <td class="text-muted" style="width: 200px;">{{ _('Application Name') }}</td>
+                    <td><strong>{{ config.app_name }}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-muted">{{ _('Debug Mode') }}</td>
+                    <td>
+                        {% if config.debug_mode %}
+                            <span class="badge bg-warning">{{ _('Enabled') }}</span>
+                        {% else %}
+                            <span class="badge bg-success">{{ _('Disabled') }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-muted">{{ _('Database') }}</td>
+                    <td><code>{{ config.database_uri }}</code></td>
+                </tr>
+                <tr>
+                    <td class="text-muted">{{ _('Max Upload Size') }}</td>
+                    <td>{{ config.upload_max_size }} MB</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">{{ _('Allowed File Types') }}</td>
+                    <td>
+                        {% for ext in config.allowed_extensions %}
+                            <span class="badge bg-secondary me-1">.{{ ext }}</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-muted">{{ _('Session Lifetime') }}</td>
+                    <td>{{ config.session_lifetime }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 操作按钮 -->
+<div class="modern-box mt-4">
+    <h5 class="mb-4">
+        <i class="fa-solid fa-tools me-2 text-primary"></i>
+        {{ _('System Operations') }}
+    </h5>
+    
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="d-flex align-items-center p-3 border rounded">
+                <div class="flex-shrink-0">
+                    <i class="fa-solid fa-database text-primary fs-3"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="mb-1">{{ _('Database Backup') }}</h6>
+                    <p class="text-muted small mb-0">{{ _('Backup system database') }}</p>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" onclick="alert('{{ _('Feature coming soon') }}')">
+                    {{ _('Backup') }}
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex align-items-center p-3 border rounded">
+                <div class="flex-shrink-0">
+                    <i class="fa-solid fa-broom text-warning fs-3"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="mb-1">{{ _('Clear Cache') }}</h6>
+                    <p class="text-muted small mb-0">{{ _('Clear system cache') }}</p>
+                </div>
+                <button class="btn btn-outline-warning btn-sm" onclick="alert('{{ _('Feature coming soon') }}')">
+                    {{ _('Clear') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

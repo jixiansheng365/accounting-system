@@ -1,0 +1,714 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ _('Upload Report') }}{% endblock %}
+
+{% set active_menu = 'upload' %}
+
+{% block extra_css %}
+<style>
+    /* 上传区域样式 */
+    .upload-zone {
+        border: 2px dashed #dee2e6;
+        border-radius: 12px;
+        padding: 60px 40px;
+        text-align: center;
+        background: #f8f9fa;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+        border-color: #0d6efd;
+        background: #cfe2ff;
+    }
+
+    .upload-zone-icon {
+        font-size: 64px;
+        margin-bottom: 16px;
+        color: #6c757d;
+    }
+
+    .upload-zone-text {
+        font-size: 16px;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+    .upload-zone-hint {
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    /* 文件列表 */
+    .upload-file-list {
+        margin-top: 24px;
+    }
+
+    .upload-file-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .upload-file-item:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .upload-file-item.uploading {
+        opacity: 0.7;
+    }
+
+    .upload-file-item.success {
+        border-color: #28a745;
+        background: #d1fae5;
+    }
+
+    .upload-file-item.error {
+        border-color: #dc3545;
+        background: #f8d7da;
+    }
+
+    .upload-file-icon {
+        width: 48px;
+        height: 48px;
+        background: #cfe2ff;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+        color: #0d6efd;
+    }
+
+    .upload-file-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .upload-file-name {
+        font-weight: 500;
+        color: #212529;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .upload-file-meta {
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    .upload-file-progress {
+        width: 200px;
+        flex-shrink: 0;
+    }
+
+    .upload-file-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    /* 进度条 */
+    .progress {
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: #0d6efd;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-bar.success {
+        background: #28a745;
+    }
+
+    .progress-bar.error {
+        background: #dc3545;
+    }
+
+    /* 表单样式 */
+    .upload-form-section {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .upload-form-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: #212529;
+    }
+
+    /* 批量设置 */
+    .batch-settings {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    /* 文件类型标签 */
+    .file-type-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .file-type-tag {
+        padding: 4px 12px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    /* 统计信息 */
+    .upload-stats {
+        display: flex;
+        gap: 24px;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .upload-stat {
+        text-align: center;
+    }
+
+    .upload-stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    .upload-stat-label {
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    /* 拖拽提示 */
+    .drag-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(13, 110, 253, 0.1);
+        border: 4px dashed #0d6efd;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        pointer-events: none;
+    }
+
+    .drag-overlay.active {
+        display: flex;
+    }
+
+    .drag-overlay-text {
+        font-size: 32px;
+        font-weight: 700;
+        color: #0d6efd;
+        background: white;
+        padding: 40px 60px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 返回按钮 */
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        color: #6c757d;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        margin-bottom: 16px;
+    }
+
+    .btn-back:hover {
+        background: #e9ecef;
+        color: #495057;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('admin.dashboard', lang=session.get('lang', 'zh_CN')) }}">{{ _('Dashboard') }}</a>
+        </li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item active">{{ _('Upload Report') }}</li>
+    </ul>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fa-solid fa-cloud-arrow-up me-2" style="color: #0d6efd;"></i>{{ _('Upload Report') }}
+    </h1>
+    <p class="page-subtitle">{{ _('Upload financial reports for customers') }}</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- 上传区域 -->
+        <div class="modern-box">
+            <div class="card-body" style="padding: 0;">
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-zone-icon">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div class="upload-zone-text">{{ _('Drag and drop files here') }}</div>
+                    <div class="upload-zone-hint">{{ _('or click to browse files (PDF, Excel, CSV max 50MB)') }}</div>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.xls,.xlsx,.csv" style="display: none;">
+                </div>
+
+                <!-- 支持的文件类型 -->
+                <div class="file-type-tags">
+                    <span class="file-type-tag"><i class="fa-solid fa-file-pdf me-1"></i>PDF</span>
+                    <span class="file-type-tag"><i class="fa-solid fa-file-excel me-1"></i>Excel (.xls, .xlsx)</span>
+                    <span class="file-type-tag"><i class="fa-solid fa-file-csv me-1"></i>CSV</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 上传文件列表 -->
+        <div class="modern-box" id="fileListCard" style="display: none;">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-list"></i>{{ _('Files to Upload') }}
+                </h3>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="clearAllFiles()">
+                    <i class="fa-solid fa-trash me-2"></i>{{ _('Clear All') }}
+                </button>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="upload-file-list" id="fileList">
+                    <!-- 文件项将通过JS动态添加 -->
+                </div>
+
+                <!-- 统计信息 -->
+                <div class="upload-stats">
+                    <div class="upload-stat">
+                        <div class="upload-stat-value" id="totalFiles">0</div>
+                        <div class="upload-stat-label">{{ _('Files') }}</div>
+                    </div>
+                    <div class="upload-stat">
+                        <div class="upload-stat-value" id="totalSize">0 MB</div>
+                        <div class="upload-stat-label">{{ _('Total Size') }}</div>
+                    </div>
+                    <div class="upload-stat">
+                        <div class="upload-stat-value" id="uploadedFiles">0</div>
+                        <div class="upload-stat-label">{{ _('Uploaded') }}</div>
+                    </div>
+                </div>
+
+                <!-- 上传按钮 -->
+                <div class="d-flex gap-2 mt-4">
+                    <button type="button" class="btn btn-primary" id="uploadBtn" onclick="startUpload()">
+                        <i class="fa-solid fa-cloud-arrow-up me-2"></i>{{ _('Start Upload') }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="clearAllFiles()">
+                        <i class="fa-solid fa-xmark me-2"></i>{{ _('Cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- 批量设置 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-sliders"></i>{{ _('Batch Settings') }}
+                </h3>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="mb-3">
+                    <label class="form-label">{{ _('Customer') }} <span class="text-danger">*</span></label>
+                    <select class="form-control" id="batchCustomer" name="customer_id">
+                        <option value="">{{ _('Select Customer') }}</option>
+                        {% for customer in all_customers|default([]) %}
+                        <option value="{{ customer.id }}" {% if preselected_customer_id == customer.id %}selected{% endif %}>
+                            {{ customer.company_name }} ({{ customer.customer_code }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-text">{{ _('Apply to all files') }}</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ _('Report Type') }}</label>
+                    <select class="form-control" id="batchReportType" name="report_type">
+                        <option value="">{{ _('Auto Detect') }}</option>
+                        {% for rt in report_types|default([]) %}
+                        <option value="{{ rt.id }}">{{ rt.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ _('Report Period') }}</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <select class="form-control" id="batchYear" name="year">
+                                <option value="">{{ _('Year') }}</option>
+                                {% for y in available_years|default([2024, 2025, 2026]) %}
+                                <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-control" id="batchMonth" name="month">
+                                <option value="">{{ _('Month') }}</option>
+                                {% for m in range(1, 13) %}
+                                <option value="{{ m }}" {% if m == current_month %}selected{% endif %}>{{ m }}{{ _('Month') }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">描述</label>
+                    <textarea class="form-control" id="batchDescription" rows="3" placeholder="所有文件的可选描述" style="height: auto; padding: 12px;"></textarea>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="notifyCustomer" checked>
+                    <label class="form-check-label" for="notifyCustomer">
+                        上传后通知客户
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 上传提示 -->
+        <div class="modern-box">
+            <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px;">
+                <h3 class="modern-title" style="margin-bottom: 0 !important;">
+                    <i class="fa-solid fa-lightbulb"></i>提示
+                </h3>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <ul class="mb-0" style="padding-left: 16px; font-size: 14px; color: #6c757d;">
+                    <li class="mb-2"><i class="fa-solid fa-check me-2 text-success"></i>单个文件大小限制: 50MB</li>
+                    <li class="mb-2"><i class="fa-solid fa-check me-2 text-success"></i>支持格式: PDF, Excel, CSV</li>
+                    <li class="mb-2"><i class="fa-solid fa-check me-2 text-success"></i>可同时上传多个文件</li>
+                    <li><i class="fa-solid fa-check me-2 text-success"></i>客户将自动收到通知</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 拖拽遮罩 -->
+<div class="drag-overlay" id="dragOverlay">
+    <div class="drag-overlay-text">
+        <i class="fa-solid fa-cloud-arrow-up me-3"></i>释放文件
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let filesToUpload = [];
+    let uploadedCount = 0;
+
+    // 初始化拖拽上传
+    $(document).ready(function() {
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const dragOverlay = document.getElementById('dragOverlay');
+
+        // 点击上传
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        // 文件选择
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // 拖拽事件
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        document.body.addEventListener('dragenter', () => {
+            dragOverlay.classList.add('active');
+        });
+
+        dragOverlay.addEventListener('dragleave', (e) => {
+            if (e.target === dragOverlay) {
+                dragOverlay.classList.remove('active');
+            }
+        });
+
+        dragOverlay.addEventListener('drop', (e) => {
+            dragOverlay.classList.remove('active');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        uploadZone.addEventListener('dragenter', () => {
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+    });
+
+    // 处理文件
+    function handleFiles(files) {
+        const validFiles = Array.from(files).filter(file => {
+            const validTypes = ['application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
+            const validExtensions = ['.pdf', '.xls', '.xlsx', '.csv'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (file.size > 50 * 1024 * 1024) {
+                showToast('错误', file.name + ': 文件大小超过 50MB 限制', 'error');
+                return false;
+            }
+
+            if (!validExtensions.includes(fileExtension)) {
+                showToast('错误', file.name + ': 不支持的文件类型', 'error');
+                return false;
+            }
+
+            return true;
+        });
+
+        filesToUpload = [...filesToUpload, ...validFiles];
+        renderFileList();
+        updateStats();
+    }
+
+    // 渲染文件列表
+    function renderFileList() {
+        const fileList = document.getElementById('fileList');
+        const fileListCard = document.getElementById('fileListCard');
+
+        if (filesToUpload.length === 0) {
+            fileListCard.style.display = 'none';
+            return;
+        }
+
+        fileListCard.style.display = 'block';
+        fileList.innerHTML = '';
+
+        filesToUpload.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'upload-file-item';
+            fileItem.id = `file-item-${index}`;
+
+            const fileIcon = getFileIcon(file.name);
+            const fileSize = formatFileSize(file.size);
+
+            fileItem.innerHTML = `
+                <div class="upload-file-icon">${fileIcon}</div>
+                <div class="upload-file-info">
+                    <div class="upload-file-name">${file.name}</div>
+                    <div class="upload-file-meta">${fileSize}</div>
+                </div>
+                <div class="upload-file-progress" id="progress-${index}">
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="upload-file-status" id="status-${index}">
+                    <span class="text-muted" style="font-size: 13px;">等待中</span>
+                    <button type="button" class="btn-icon btn-delete" onclick="removeFile(${index})" title="移除">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `;
+
+            fileList.appendChild(fileItem);
+        });
+    }
+
+    // 获取文件图标
+    function getFileIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        const icons = {
+            'pdf': '<i class="fa-solid fa-file-pdf"></i>',
+            'xls': '<i class="fa-solid fa-file-excel"></i>',
+            'xlsx': '<i class="fa-solid fa-file-excel"></i>',
+            'csv': '<i class="fa-solid fa-file-csv"></i>'
+        };
+        return icons[ext] || '<i class="fa-solid fa-file"></i>';
+    }
+
+    // 格式化文件大小
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 更新统计
+    function updateStats() {
+        document.getElementById('totalFiles').textContent = filesToUpload.length;
+        document.getElementById('uploadedFiles').textContent = uploadedCount;
+
+        const totalBytes = filesToUpload.reduce((sum, file) => sum + file.size, 0);
+        document.getElementById('totalSize').textContent = formatFileSize(totalBytes);
+    }
+
+    // 移除文件
+    function removeFile(index) {
+        filesToUpload.splice(index, 1);
+        renderFileList();
+        updateStats();
+    }
+
+    // 清空所有文件
+    function clearAllFiles() {
+        filesToUpload = [];
+        uploadedCount = 0;
+        renderFileList();
+        updateStats();
+        document.getElementById('fileInput').value = '';
+    }
+
+    // 开始上传
+    function startUpload() {
+        if (filesToUpload.length === 0) {
+            showToast('警告', '请选择要上传的文件', 'error');
+            return;
+        }
+
+        const customerId = document.getElementById('batchCustomer').value;
+        if (!customerId) {
+            showToast('警告', '请选择客户', 'error');
+            document.getElementById('batchCustomer').focus();
+            return;
+        }
+
+        const uploadBtn = document.getElementById('uploadBtn');
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>上传中...';
+
+        const reportType = document.getElementById('batchReportType').value;
+        const year = document.getElementById('batchYear').value;
+        const month = document.getElementById('batchMonth').value;
+        const description = document.getElementById('batchDescription').value;
+        const notify = document.getElementById('notifyCustomer').checked;
+
+        let completedCount = 0;
+
+        filesToUpload.forEach((file, index) => {
+            uploadFile(file, index, {
+                customer_id: customerId,
+                report_type: reportType,
+                year: year,
+                month: month,
+                description: description,
+                notify: notify
+            }, () => {
+                completedCount++;
+                if (completedCount === filesToUpload.length) {
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up me-2"></i>开始上传';
+                    showToast('成功', '所有文件上传成功', 'success');
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for('admin.reports_page') }}';
+                    }, 1500);
+                }
+            });
+        });
+    }
+
+    // 上传单个文件
+    function uploadFile(file, index, settings, onComplete) {
+        const fileItem = document.getElementById(`file-item-${index}`);
+        const progressBar = fileItem.querySelector('.progress-bar');
+        const statusDiv = document.getElementById(`status-${index}`);
+
+        fileItem.classList.add('uploading');
+        statusDiv.innerHTML = '<span class="text-muted" style="font-size: 13px;">上传中...</span>';
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('customer_id', settings.customer_id);
+        if (settings.report_type) formData.append('report_type', settings.report_type);
+        if (settings.year) formData.append('year', settings.year);
+        if (settings.month) formData.append('month', settings.month);
+        if (settings.description) formData.append('description', settings.description);
+        formData.append('notify', settings.notify);
+
+        $.ajax({
+            url: '{{ url_for('admin.upload_report') }}',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                const xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = (e.loaded / e.total) * 100;
+                        progressBar.style.width = percent + '%';
+                    }
+                });
+                return xhr;
+            },
+            success: function(response) {
+                fileItem.classList.remove('uploading');
+                fileItem.classList.add('success');
+                progressBar.classList.add('success');
+                progressBar.style.width = '100%';
+                statusDiv.innerHTML = '<span class="status-badge success">成功</span>';
+                uploadedCount++;
+                updateStats();
+            },
+            error: function(xhr) {
+                fileItem.classList.remove('uploading');
+                fileItem.classList.add('error');
+                progressBar.classList.add('error');
+                const message = xhr.responseJSON?.message || '上传失败';
+                statusDiv.innerHTML = `<span class="status-badge danger" title="${message}">失败</span>`;
+            },
+            complete: onComplete
+        });
+    }
+</script>
+{% endblock %}

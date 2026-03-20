@@ -1,0 +1,512 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_Hans_CN\n"
+
+# 系统通用
+msgid "Accounting Customer Management System"
+msgstr "代理记账客户管理系统"
+
+msgid "Smart Bookkeeping"
+msgstr "智能记账"
+
+msgid "Home"
+msgstr "首页"
+
+msgid "Login"
+msgstr "登录"
+
+msgid "Logout"
+msgstr "退出登录"
+
+msgid "Register"
+msgstr "注册"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Email"
+msgstr "邮箱"
+
+msgid "Phone"
+msgstr "电话"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Created At"
+msgstr "创建时间"
+
+msgid "Updated At"
+msgstr "更新时间"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Confirm"
+msgstr "确认"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Loading"
+msgstr "加载中"
+
+msgid "No data"
+msgstr "暂无数据"
+
+# 登录页面
+msgid "User Login"
+msgstr "用户登录"
+
+msgid "Welcome back, please login to your account"
+msgstr "欢迎回来，请登录您的账户"
+
+msgid "Customer Code"
+msgstr "客户代码"
+
+msgid "Enter customer code"
+msgstr "请输入客户代码"
+
+msgid "Enter password"
+msgstr "请输入密码"
+
+msgid "Forgot password"
+msgstr "忘记密码"
+
+msgid "Contact accounting firm"
+msgstr "联系会计事务所"
+
+msgid "Remember me"
+msgstr "记住我"
+
+msgid "Invalid username or password"
+msgstr "用户名或密码错误"
+
+msgid "Account has been disabled"
+msgstr "账户已被禁用"
+
+msgid "Username and password are required"
+msgstr "请输入用户名和密码"
+
+# 语言选择
+msgid "Simplified Chinese"
+msgstr "简体中文"
+
+msgid "Traditional Chinese"
+msgstr "繁体中文"
+
+msgid "Japanese"
+msgstr "日语"
+
+msgid "Korean"
+msgstr "韩语"
+
+msgid "English"
+msgstr "英语"
+
+# 导航菜单
+msgid "Dashboard"
+msgstr "仪表盘"
+
+msgid "Customer Management"
+msgstr "客户管理"
+
+msgid "Report Management"
+msgstr "报表管理"
+
+msgid "Upload Report"
+msgstr "上传报表"
+
+msgid "System Settings"
+msgstr "系统设置"
+
+msgid "System Logs"
+msgstr "系统日志"
+
+msgid "Admin"
+msgstr "管理员"
+
+msgid "Total Reports"
+msgstr "报表总数"
+
+msgid "This Month New"
+msgstr "本月新增"
+
+msgid "Recent Customers"
+msgstr "最近客户"
+
+msgid "Add Customer"
+msgstr "添加客户"
+
+msgid "Customer Name"
+msgstr "客户名称"
+
+msgid "Contact Person"
+msgstr "联系人"
+
+msgid "Contact Phone"
+msgstr "联系电话"
+
+msgid "Company Address"
+msgstr "公司地址"
+
+msgid "Tax Type"
+msgstr "纳税类型"
+
+msgid "General Taxpayer"
+msgstr "一般纳税人"
+
+msgid "Small-scale Taxpayer"
+msgstr "小规模纳税人"
+
+msgid "Accounting Service"
+msgstr "记账服务"
+
+msgid "Tax Filing"
+msgstr "纳税申报"
+
+msgid "Annual Inspection"
+msgstr "工商年检"
+
+msgid "Other Services"
+msgstr "其他服务"
+
+msgid "Service Fee"
+msgstr "服务费用"
+
+msgid "Start Date"
+msgstr "开始日期"
+
+msgid "End Date"
+msgstr "结束日期"
+
+msgid "Remarks"
+msgstr "备注"
+
+msgid "Active"
+msgstr "启用"
+
+msgid "Inactive"
+msgstr "停用"
+
+msgid "Customer List"
+msgstr "客户列表"
+
+msgid "Customer Details"
+msgstr "客户详情"
+
+msgid "Edit Customer"
+msgstr "编辑客户"
+
+msgid "Delete Customer"
+msgstr "删除客户"
+
+msgid "Customer created successfully"
+msgstr "客户创建成功"
+
+msgid "Customer updated successfully"
+msgstr "客户更新成功"
+
+msgid "Customer deleted successfully"
+msgstr "客户删除成功"
+
+msgid "Customer not found"
+msgstr "客户不存在"
+
+# 报表相关
+msgid "Report Type"
+msgstr "报表类型"
+
+msgid "Report Year"
+msgstr "报表年份"
+
+msgid "Report Month"
+msgstr "报表月份"
+
+msgid "Upload Date"
+msgstr "上传日期"
+
+msgid "File Size"
+msgstr "文件大小"
+
+msgid "Download Count"
+msgstr "下载次数"
+
+msgid "Balance Sheet"
+msgstr "资产负债表"
+
+msgid "Income Statement"
+msgstr "利润表"
+
+msgid "Cash Flow Statement"
+msgstr "现金流量表"
+
+msgid "Tax Return"
+msgstr "纳税申报表"
+
+msgid "General Ledger"
+msgstr "总账"
+
+msgid "Detail Ledger"
+msgstr "明细账"
+
+msgid "Bank Statement"
+msgstr "银行对账单"
+
+msgid "Other"
+msgstr "其他"
+
+msgid "Draft"
+msgstr "草稿"
+
+msgid "Submitted"
+msgstr "已提交"
+
+msgid "Reviewed"
+msgstr "已审核"
+
+msgid "Approved"
+msgstr "已批准"
+
+msgid "Archived"
+msgstr "已归档"
+
+msgid "Upload File"
+msgstr "上传文件"
+
+msgid "Select File"
+msgstr "选择文件"
+
+msgid "Drag and drop files here"
+msgstr "将文件拖放到此处"
+
+msgid "or click to browse"
+msgstr "或点击浏览"
+
+msgid "Max file size"
+msgstr "最大文件大小"
+
+msgid "Supported formats"
+msgstr "支持的格式"
+
+msgid "File uploaded successfully"
+msgstr "文件上传成功"
+
+msgid "File deleted successfully"
+msgstr "文件删除成功"
+
+msgid "Download"
+msgstr "下载"
+
+msgid "Preview"
+msgstr "预览"
+
+msgid "Print"
+msgstr "打印"
+
+msgid "Share"
+msgstr "分享"
+
+# 系统设置页面
+msgid "Total Users"
+msgstr "总用户数"
+
+msgid "Active Users"
+msgstr "活跃用户"
+
+msgid "Admin Users"
+msgstr "管理员用户"
+
+msgid "System Configuration"
+msgstr "系统配置"
+
+msgid "Application Name"
+msgstr "应用名称"
+
+msgid "Debug Mode"
+msgstr "调试模式"
+
+msgid "Enabled"
+msgstr "已启用"
+
+msgid "Disabled"
+msgstr "已禁用"
+
+msgid "Database"
+msgstr "数据库"
+
+msgid "Max Upload Size"
+msgstr "最大上传大小"
+
+msgid "Allowed File Types"
+msgstr "允许的文件类型"
+
+msgid "Session Lifetime"
+msgstr "会话有效期"
+
+msgid "System Operations"
+msgstr "系统操作"
+
+msgid "Database Backup"
+msgstr "数据库备份"
+
+msgid "Backup system database"
+msgstr "备份系统数据库"
+
+msgid "Feature coming soon"
+msgstr "功能即将推出"
+
+msgid "Backup"
+msgstr "备份"
+
+msgid "Clear Cache"
+msgstr "清除缓存"
+
+msgid "Clear system cache"
+msgstr "清除系统缓存"
+
+msgid "Clear"
+msgstr "清除"
+
+# 系统日志页面
+msgid "Total Logs"
+msgstr "日志总数"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Failed"
+msgstr "失败"
+
+msgid "Today"
+msgstr "今日"
+
+msgid "Login Logs"
+msgstr "登录日志"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "User"
+msgstr "用户"
+
+msgid "IP Address"
+msgstr "IP地址"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Reason"
+msgstr "原因"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "No logs found"
+msgstr "暂无日志"
+
+msgid "No login logs available"
+msgstr "暂无登录日志"
+
+msgid "Showing"
+msgstr "显示"
+
+msgid "of"
+msgstr "共"
+
+msgid "entries"
+msgstr "条记录"
+
+# 分页
+msgid "Previous"
+msgstr "上一页"
+
+msgid "Next"
+msgstr "下一页"
+
+# 通用操作
+msgid "View"
+msgstr "查看"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "Export"
+msgstr "导出"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Batch Operation"
+msgstr "批量操作"
+
+msgid "Select All"
+msgstr "全选"
+
+msgid "Deselect All"
+msgstr "取消全选"
+
+msgid "Clear All"
+msgstr "清除全部"
+
+msgid "Pending Uploads"
+msgstr "待处理上传"
+
+msgid "Waiting for processing"
+msgstr "等待处理"
+
+msgid "Active Today"
+msgstr "今日活跃"
+
+msgid "Customers logged in today"
+msgstr "客户今日登录"
+
+msgid "Admin Dashboard"
+msgstr "管理后台"
+
+msgid "Administrator"
+msgstr "管理员"

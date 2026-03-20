@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'zh_CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('User Login') }} - {{ _('Smart Bookkeeping') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', 'Noto Sans SC', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 40px 80px;
+            position: relative;
+        }
+
+        .login-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.2) 100%);
+        }
+
+        .login-container {
+            width: 380px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 16px;
+            padding: 36px 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-dropdown-wrapper {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 100;
+        }
+
+        .lang-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(13, 110, 253, 0.08);
+            border: 1px solid rgba(13, 110, 253, 0.15);
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            color: #0d6efd;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-dropdown-btn:hover {
+            background: #e0edff;
+        }
+
+        .user-avatar {
+            width: 64px;
+            height: 64px;
+            background: #0d6efd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .user-avatar i {
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .login-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .login-title p {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #0d6efd;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #0b5ed7;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8125rem;
+            color: #6b7280;
+        }
+
+        .login-footer a {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        @media (max-width: 576px) {
+            .login-page {
+                justify-content: center;
+                padding: 20px;
+            }
+
+            .login-container {
+                width: 100%;
+                max-width: 360px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <!-- 语言选择器 -->
+                <div class="lang-dropdown-wrapper">
+                    <div class="dropdown">
+                        <button class="lang-dropdown-btn dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-globe"></i>
+                            <span class="current-lang">
+                                {% if session.get('lang') == 'zh_TW' %}{{ _('Traditional Chinese') }}
+                                {% elif session.get('lang') == 'ja' %}{{ _('Japanese') }}
+                                {% elif session.get('lang') == 'ko' %}{{ _('Korean') }}
+                                {% elif session.get('lang') == 'en' %}{{ _('English') }}
+                                {% else %}{{ _('Simplified Chinese') }}
+                                {% endif %}
+                            </span>
+                            <i class="fa-solid fa-chevron-down" style="font-size: 12px; margin-left: 4px;"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                            <li><a class="dropdown-item {% if session.get('lang') == 'zh_CN' or not session.get('lang') %}active{% endif %}" href="?lang=zh_CN">{{ _('Simplified Chinese') }}</a></li>
+                            <li><a class="dropdown-item {% if session.get('lang') == 'zh_TW' %}active{% endif %}" href="?lang=zh_TW">{{ _('Traditional Chinese') }}</a></li>
+                            <li><a class="dropdown-item {% if session.get('lang') == 'ja' %}active{% endif %}" href="?lang=ja">{{ _('Japanese') }}</a></li>
+                            <li><a class="dropdown-item {% if session.get('lang') == 'ko' %}active{% endif %}" href="?lang=ko">{{ _('Korean') }}</a></li>
+                            <li><a class="dropdown-item {% if session.get('lang') == 'en' %}active{% endif %}" href="?lang=en">{{ _('English') }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 用户头像 -->
+                <div class="user-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <!-- 标题 -->
+                <div class="login-title">
+                    <h2>{{ _('User Login') }}</h2>
+                    <p>{{ _('Welcome back, please login to your account') }}</p>
+                </div>
+
+                <!-- 错误提示 -->
+                {% if error %}
+                <div class="alert alert-danger" role="alert" style="margin-bottom: 20px; border-radius: 8px; font-size: 0.875rem;">
+                    <i class="fa-solid fa-circle-exclamation" style="margin-right: 8px;"></i>{{ error }}
+                </div>
+                {% endif %}
+
+                <!-- 登录表单 -->
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <div class="form-group">
+                        <label class="form-label">{{ _('Customer Code') }}</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input type="text" class="form-control" name="username" placeholder="{{ _('Enter customer code') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">{{ _('Password') }}</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" class="form-control" name="password" placeholder="{{ _('Enter password') }}" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-login">{{ _('Login') }}</button>
+                </form>
+
+                <!-- 底部链接 -->
+                <div class="login-footer">
+                    <a href="#">{{ _('Forgot password') }}</a> · {{ _('Contact accounting firm') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

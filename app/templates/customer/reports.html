@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'zh_CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Report Query') }} - {{ app_name }}</title>
+    <!-- Bootstrap5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <style>
+        /* 报表页面特定样式 */
+        .filter-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: var(--space-5);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+        }
+        
+        /* DataTables 样式优化 */
+        .dataTables_wrapper {
+            padding: 0;
+        }
+        
+        .dataTables_length,
+        .dataTables_filter {
+            margin-bottom: 15px;
+        }
+        
+        .dataTables_length select,
+        .dataTables_filter input {
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            padding: 6px 12px;
+        }
+        
+        .dataTables_info,
+        .dataTables_paginate {
+            margin-top: 15px;
+        }
+        
+        .paginate_button {
+            border-radius: 6px !important;
+            margin: 0 2px;
+        }
+        
+        .paginate_button.current {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: white !important;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: var(--space-4);
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .form-control {
+            height: 40px;
+            padding: 0 var(--space-4);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background: var(--bg-card);
+            min-width: 150px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .quick-filters {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--gray-200);
+            align-items: center;
+        }
+        
+        .quick-filter-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .quick-filter-btn {
+            padding: var(--space-2) var(--space-4);
+            font-size: 13px;
+            border: 1px solid var(--gray-200);
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .quick-filter-btn:hover,
+        .quick-filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .results-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+        }
+        
+        .bulk-actions {
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        /* 返回按钮样式 */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 用户头像样式 */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 退出按钮样式 */
+        .logout-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* 侧边栏底部用户区域 */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu:hover {
+            background: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局响应式容器 -->
+    <div class="container-fluid px-3 px-md-4">
+        <div class="dashboard-wrapper">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon">📊</div>
+                    <div>
+                        <div class="brand-text">{{ app_name }}</div>
+                        <div class="brand-subtitle">{{ _('Accounting Portal') }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.dashboard') }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                                <span>{{ _('Dashboard') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.query_reports') }}" class="nav-link active">
+                                <span class="nav-icon"><i class="fa-solid fa-folder-open"></i></span>
+                                <span>{{ _('Report Query') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.list_reports') }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                                <span>{{ _('Monthly Reports') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.login_history') }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                                <span>{{ _('Login History') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+                                <span>{{ _('Settings') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- 改进的底部用户区域 -->
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ session.get('username', _('Customer')) }}</div>
+                        <div class="user-role">{{ _('Customer') }}</div>
+                    </div>
+                    <a href="{{ url_for('auth.logout_page') }}" class="logout-btn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        {{ _('Logout') }}
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-search">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="search-input" placeholder="搜索报表、文档...">
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge"></span>
+                    </button>
+                    <button class="header-btn"><i class="fa-solid fa-circle-question"></i></button>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="page-content">
+                <!-- Bootstrap5 容器包裹 -->
+                <div class="container">
+                    <!-- 返回按钮 -->
+                    <button class="back-button" onclick="history.back()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        {{ _('Back') }}
+                    </button>
+                    
+                    <!-- 页面标题 - 现代卡片包裹 -->
+                    <div class="modern-box">
+                        <h4 class="modern-title">
+                            <i class="fa-solid fa-file-invoice"></i>
+                            {{ _('Report Query') }}
+                        </h4>
+                        <p class="page-subtitle">{{ _('Search and download your financial reports') }}</p>
+                    </div>
+
+                    <!-- 筛选区域 - 现代卡片包裹 -->
+                    <div class="modern-box">
+                        <h4 class="modern-title">
+                            <i class="fa-solid fa-filter"></i>
+                            {{ _('Filter Reports') }}
+                        </h4>
+                        <form id="filterForm" class="filter-form">
+                            <div class="filter-row">
+                                <div class="filter-group">
+                                    <label for="year">{{ _('Year') }}</label>
+                                    <select id="year" name="year" class="form-control">
+                                        {% for y in available_years %}
+                                        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label for="month">{{ _('Month') }}</label>
+                                    <select id="month" name="month" class="form-control">
+                                        <option value="">{{ _('All') }}</option>
+                                        {% for m in range(1, 13) %}
+                                        <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>{{ m }}{{ _('Month') }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label for="report_type">{{ _('Report Type') }}</label>
+                                    <select id="report_type" name="report_type" class="form-control">
+                                        <option value="">{{ _('All') }}</option>
+                                        {% for rt in report_types %}
+                                        <option value="{{ rt.id }}" {% if rt.id == selected_report_type %}selected{% endif %}>{{ rt.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa-solid fa-magnifying-glass"></i> {{ _('Search') }}
+                                    </button>
+                                    <button type="button" id="resetBtn" class="btn btn-secondary" style="margin-left: 8px;">
+                                        <i class="fa-solid fa-rotate-left"></i> {{ _('Reset') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <div class="quick-filters">
+                            <span class="quick-filter-label">{{ _('Quick Filter') }}:</span>
+                            <a href="?period=3months" class="quick-filter-btn {% if period == '3months' %}active{% endif %}">{{ _('Last 3 Months') }}</a>
+                            <a href="?period=6months" class="quick-filter-btn {% if period == '6months' %}active{% endif %}">{{ _('Last 6 Months') }}</a>
+                            <a href="?period=1year" class="quick-filter-btn {% if period == '1year' %}active{% endif %}">{{ _('Last Year') }}</a>
+                            <a href="?period=all" class="quick-filter-btn {% if period == 'all' %}active{% endif %}">{{ _('All') }}</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 结果区域 - 现代卡片包裹 -->
+                    <div class="modern-box">
+                        <h4 class="modern-title">
+                            <i class="fa-solid fa-list"></i>
+                            {{ _('Search Results') }}
+                            {% if reports %}
+                            <span class="badge bg-primary ms-2">{{ reports|length }}</span>
+                            {% endif %}
+                        </h4>
+                        
+                        <!-- 原有业务代码完全不动 -->
+                        {% if reports %}
+                        <div class="table-wrapper">
+                            <table class="data-table table table-hover table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>{{ _('File Name') }}</th>
+                                        <th>{{ _('Report Type') }}</th>
+                                        <th>{{ _('Period') }}</th>
+                                        <th>{{ _('Upload Date') }}</th>
+                                        <th>{{ _('File Size') }}</th>
+                                        <th>{{ _('Action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for report in reports %}
+                                    <tr>
+                                        <td><input type="checkbox" class="report-checkbox" value="{{ report.id }}"></td>
+                                        <td>{{ report.file_name }}</td>
+                                        <td>{{ report.report_type_name }}</td>
+                                        <td>{{ report.report_period }}</td>
+                                        <td>{{ report.upload_date }}</td>
+                                        <td>{{ report.file_size }}</td>
+                                        <td>
+                                            <a href="{{ url_for('reports.download_report', report_id=report.id) }}" class="btn btn-sm btn-primary">
+                                                <i class="fa-solid fa-download"></i> {{ _('Download') }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bulk-actions">
+                            <button type="button" id="downloadSelectedBtn" class="btn btn-primary">
+                                <i class="fa-solid fa-download"></i> {{ _('Bulk Download') }}
+                            </button>
+                        </div>
+                        {% else %}
+                        <div style="text-align: center; padding: 60px 20px;">
+                            <div style="font-size: 64px; margin-bottom: 16px; opacity: 0.5;">📁</div>
+                            <p style="color: var(--text-muted);">{{ _('No reports found') }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- jQuery 和 DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // 初始化 DataTables
+        var table = $('.data-table').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/zh.json'
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, '{{ _("All") }}']],
+            ordering: true,
+            searching: true,
+            info: true,
+            paging: true,
+            columnDefs: [
+                { orderable: false, targets: [0, 6] } // 禁用复选框和操作列的排序
+            ]
+        });
+        
+        // 全选/取消全选
+        $('#selectAll').on('change', function() {
+            $('.report-checkbox').prop('checked', $(this).prop('checked'));
+        });
+        
+        // 重置按钮
+        $('#resetBtn').on('click', function() {
+            window.location.href = '{{ url_for("reports.query_reports") }}';
+        });
+        
+        // 批量下载
+        $('#downloadSelectedBtn').on('click', function() {
+            var selectedIds = $('.report-checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+            
+            if (selectedIds.length === 0) {
+                alert('{{ _("Please select reports to download") }}');
+                return;
+            }
+            
+            selectedIds.forEach(function(id) {
+                var url = '{{ url_for("reports.download_report", report_id=0) }}'.replace('0', id);
+                window.open(url, '_blank');
+            });
+        });
+    });
+    </script>
+    <!-- Bootstrap5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

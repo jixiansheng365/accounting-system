@@ -1,0 +1,462 @@
+/**
+ * 代理记账客户管理系统 - 登录页样式
+ * 日本科技风格设计 - 参考 Mercari、Rakuten、Freee
+ */
+
+/* ========== 登录页面容器 ========== */
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+}
+
+/* ========== 左侧品牌区域 ========== */
+.login-brand {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-700) 100%);
+  color: var(--text-inverse);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-brand::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.login-brand__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 480px;
+}
+
+.login-brand__logo {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-brand__logo-icon {
+  font-size: 48px;
+}
+
+.login-brand__title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+}
+
+.login-brand__subtitle {
+  font-size: var(--font-size-lg);
+  opacity: 0.9;
+  margin-bottom: var(--space-8);
+  line-height: var(--line-height-relaxed);
+}
+
+.login-brand__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  text-align: left;
+}
+
+.login-brand__feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-base);
+}
+
+.login-brand__feature-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+/* ========== 右侧表单区域 ========== */
+.login-form-container {
+  flex: 0 0 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-8);
+  background-color: var(--bg-primary);
+}
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-form__header {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.login-form__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.login-form__subtitle {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+}
+
+/* ========== 登录表单 ========== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.login-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.login-form__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.login-form__input-wrapper {
+  position: relative;
+}
+
+.login-form__input {
+  width: 100%;
+  height: var(--input-height-lg);
+  padding: 0 var(--space-4) 0 var(--space-12);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.login-form__input:hover {
+  border-color: var(--color-primary-300);
+}
+
+.login-form__input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--bg-primary);
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
+.login-form__input-icon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.login-form__toggle-password {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.login-form__toggle-password:hover {
+  color: var(--text-secondary);
+}
+
+/* 记住我和忘记密码 */
+.login-form__options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.login-form__remember {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.login-form__remember input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+.login-form__forgot {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.login-form__forgot:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+/* 登录按钮 */
+.login-form__submit {
+  width: 100%;
+  height: var(--button-height-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-inverse);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-600) 100%);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-md);
+}
+
+.login-form__submit:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-form__submit:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.login-form__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 分隔线 */
+.login-form__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.login-form__divider::before,
+.login-form__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-primary);
+}
+
+/* 社交登录 */
+.login-form__social {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.login-form__social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--button-height-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.login-form__social-btn:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-secondary);
+}
+
+/* 注册链接 */
+.login-form__footer {
+  text-align: center;
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-primary);
+}
+
+.login-form__footer-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.login-form__footer-link {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  transition: color var(--transition-fast);
+}
+
+.login-form__footer-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+/* 语言选择器 */
+.login-form__language {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.login-form__language-btn {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.login-form__language-btn:hover,
+.login-form__language-btn--active {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ========== 版权信息 ========== */
+.login-footer {
+  position: absolute;
+  bottom: var(--space-6);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 992px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .login-brand {
+    flex: none;
+    padding: var(--space-6);
+    min-height: 200px;
+  }
+
+  .login-brand__content {
+    max-width: 100%;
+  }
+
+  .login-brand__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .login-brand__subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .login-brand__features {
+    display: none;
+  }
+
+  .login-form-container {
+    flex: 1;
+    padding: var(--space-6);
+  }
+
+  .login-form-wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-brand {
+    padding: var(--space-5);
+    min-height: 160px;
+  }
+
+  .login-brand__logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-4);
+  }
+
+  .login-brand__logo-icon {
+    font-size: 32px;
+  }
+
+  .login-brand__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .login-form-container {
+    padding: var(--space-5);
+  }
+
+  .login-form__title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .login-form__options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .login-form__social {
+    flex-direction: column;
+  }
+}
+
+/* ========== 深色模式 ========== */
+.theme-dark .login-page {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.theme-dark .login-form-container {
+  background-color: var(--bg-secondary);
+}

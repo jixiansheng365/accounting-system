@@ -1,0 +1,544 @@
+{% extends "admin/base.html" %}
+
+{% block title %}报表管理{% endblock %}
+
+{% set active_menu = 'reports' %}
+
+{% block extra_css %}
+<style>
+    /* 筛选区域样式 */
+    .filter-section {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: end;
+    }
+
+    .filter-item {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .filter-item label {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    /* 统计卡片 */
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .stat-icon.blue {
+        background: #cfe2ff;
+        color: #0d6efd;
+    }
+
+    .stat-icon.green {
+        background: #d1fae5;
+        color: #28a745;
+    }
+
+    .stat-icon.orange {
+        background: #ffe5cc;
+        color: #fd7e14;
+    }
+
+    .stat-icon.purple {
+        background: #e0c3fc;
+        color: #6f42c1;
+    }
+
+    .stat-info {
+        flex: 1;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: #6c757d;
+        margin-top: 4px;
+    }
+
+    /* 表格样式优化 */
+    .report-table th {
+        font-weight: 600;
+        color: #495057;
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .report-table td {
+        vertical-align: middle;
+    }
+
+    .file-type-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .file-type-badge.pdf {
+        background: #f8d7da;
+        color: #dc3545;
+    }
+
+    .file-type-badge.excel {
+        background: #d1fae5;
+        color: #28a745;
+    }
+
+    .file-type-badge.other {
+        background: #e2e3e5;
+        color: #6c757d;
+    }
+
+    /* 操作按钮 */
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-icon.view {
+        background: #cfe2ff;
+        color: #0d6efd;
+    }
+
+    .btn-icon.view:hover {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    .btn-icon.download {
+        background: #d1fae5;
+        color: #28a745;
+    }
+
+    .btn-icon.download:hover {
+        background: #28a745;
+        color: #fff;
+    }
+
+    .btn-icon.delete {
+        background: #f8d7da;
+        color: #dc3545;
+    }
+
+    .btn-icon.delete:hover {
+        background: #dc3545;
+        color: #fff;
+    }
+
+    /* 下载次数 */
+    .download-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        background: #f8f9fa;
+        border-radius: 20px;
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    .download-count i {
+        color: #0d6efd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('admin.dashboard') }}">仪表盘</a>
+        </li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item active">报表管理</li>
+    </ul>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fa-solid fa-file-invoice me-2" style="color: #0d6efd;"></i>报表管理
+    </h1>
+    <p class="page-subtitle">管理系统中的所有客户报表</p>
+</div>
+
+<!-- 统计卡片 -->
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon blue">
+            <i class="fa-solid fa-file-invoice"></i>
+        </div>
+        <div class="stat-info">
+            <div class="stat-value" id="totalReports">-</div>
+            <div class="stat-label">报表总数</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">
+            <i class="fa-solid fa-check-circle"></i>
+        </div>
+        <div class="stat-info">
+            <div class="stat-value" id="approvedReports">-</div>
+            <div class="stat-label">已批准</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon orange">
+            <i class="fa-solid fa-clock"></i>
+        </div>
+        <div class="stat-info">
+            <div class="stat-value" id="pendingReports">-</div>
+            <div class="stat-label">待审核</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon purple">
+            <i class="fa-solid fa-download"></i>
+        </div>
+        <div class="stat-info">
+            <div class="stat-value" id="totalDownloads">-</div>
+            <div class="stat-label">总下载次数</div>
+        </div>
+    </div>
+</div>
+
+<!-- 筛选区域 -->
+<div class="filter-section">
+    <div class="filter-row">
+        <div class="filter-item">
+            <label>客户</label>
+            <select class="form-control" id="filterCustomer">
+                <option value="">全部客户</option>
+                {% for customer in all_customers %}
+                <option value="{{ customer.id }}">{{ customer.company_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>报表类型</label>
+            <select class="form-control" id="filterType">
+                <option value="">全部类型</option>
+                {% for rt in report_types %}
+                <option value="{{ rt.id }}">{{ rt.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>状态</label>
+            <select class="form-control" id="filterStatus">
+                <option value="">全部状态</option>
+                {% for status in status_options %}
+                <option value="{{ status.id }}">{{ status.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>年份</label>
+            <select class="form-control" id="filterYear">
+                <option value="">全部年份</option>
+                {% for y in range(2023, 2027) %}
+                <option value="{{ y }}">{{ y }}年</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-item" style="flex: 0;">
+            <button class="btn btn-primary" onclick="loadReports()">
+                <i class="fa-solid fa-filter me-2"></i>筛选
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 报表列表 -->
+<div class="modern-box">
+    <div class="card-header" style="padding: 0 0 16px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <h3 class="modern-title" style="margin-bottom: 0 !important;">
+            <i class="fa-solid fa-list"></i>报表列表
+        </h3>
+        <a href="{{ url_for('admin.upload_page') }}" class="btn btn-primary">
+            <i class="fa-solid fa-cloud-arrow-up me-2"></i>上传报表
+        </a>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="table report-table table-hover" id="reportsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>报表名称</th>
+                        <th>客户</th>
+                        <th>类型</th>
+                        <th>期间</th>
+                        <th>状态</th>
+                        <th>上传日期</th>
+                        <th>下载次数</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="reportsTableBody">
+                    <!-- 数据将通过JS动态加载 -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 分页 -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- 分页将通过JS动态生成 -->
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentPage = 1;
+    let totalPages = 1;
+
+    $(document).ready(function() {
+        loadReports();
+        loadStatistics();
+    });
+
+    // 加载报表列表
+    function loadReports(page = 1) {
+        currentPage = page;
+        
+        const params = {
+            page: page,
+            per_page: 10
+        };
+        
+        // 添加筛选条件
+        const customerId = $('#filterCustomer').val();
+        const reportType = $('#filterType').val();
+        const status = $('#filterStatus').val();
+        const year = $('#filterYear').val();
+        
+        if (customerId) params.customer_id = customerId;
+        if (reportType) params.report_type = reportType;
+        if (status) params.status = status;
+        if (year) params.year = year;
+        
+        $.ajax({
+            url: '{{ url_for("admin.list_reports") }}',
+            method: 'GET',
+            data: params,
+            success: function(response) {
+                if (response.success) {
+                    renderReportsTable(response.data.items);
+                    renderPagination(response.data.page, response.data.total, response.data.per_page);
+                }
+            },
+            error: function() {
+                showToast('错误', '加载报表列表失败', 'error');
+            }
+        });
+    }
+
+    // 渲染报表表格
+    function renderReportsTable(reports) {
+        const tbody = $('#reportsTableBody');
+        tbody.empty();
+        
+        if (reports.length === 0) {
+            tbody.html('<tr><td colspan="9" class="text-center py-4">暂无报表数据</td></tr>');
+            return;
+        }
+        
+        reports.forEach(function(report) {
+            const fileTypeClass = report.file_type === 'pdf' ? 'pdf' : 
+                                 (report.file_type === 'xls' || report.file_type === 'xlsx') ? 'excel' : 'other';
+            const fileTypeIcon = report.file_type === 'pdf' ? 'fa-file-pdf' : 
+                                (report.file_type === 'xls' || report.file_type === 'xlsx') ? 'fa-file-excel' : 'fa-file';
+            
+            const statusBadge = {
+                'draft': '<span class="badge bg-secondary">草稿</span>',
+                'submitted': '<span class="badge bg-warning">已提交</span>',
+                'reviewed': '<span class="badge bg-info">已审核</span>',
+                'approved': '<span class="badge bg-success">已批准</span>',
+                'archived': '<span class="badge bg-dark">已归档</span>'
+            }[report.status] || '<span class="badge bg-secondary">' + report.status + '</span>';
+            
+            const row = `
+                <tr>
+                    <td>${report.id}</td>
+                    <td>
+                        <strong>${report.report_name}</strong>
+                        <span class="file-type-badge ${fileTypeClass} ms-2">
+                            <i class="fa-solid ${fileTypeIcon}"></i> ${report.file_type ? report.file_type.toUpperCase() : '未知'}
+                        </span>
+                    </td>
+                    <td>${report.customer_name || '-'}</td>
+                    <td>${report.report_type_display}</td>
+                    <td>${report.period_display}</td>
+                    <td>${statusBadge}</td>
+                    <td>${report.created_at ? report.created_at.substring(0, 10) : '-'}</td>
+                    <td>
+                        <span class="download-count">
+                            <i class="fa-solid fa-download"></i> ${report.download_count || 0}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            ${report.file_type === 'pdf' ? `
+                            <a href="/reports/preview/${report.id}" target="_blank" class="btn-icon view" title="预览">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            ` : ''}
+                            <a href="/reports/download/${report.id}" class="btn-icon download" title="下载">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
+                            <button class="btn-icon delete" onclick="deleteReport(${report.id})" title="删除">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+    }
+
+    // 渲染分页
+    function renderPagination(page, total, perPage) {
+        totalPages = Math.ceil(total / perPage);
+        const pagination = $('#pagination');
+        pagination.empty();
+        
+        if (totalPages <= 1) return;
+        
+        // 上一页
+        if (page > 1) {
+            pagination.append(`<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadReports(${page - 1})">上一页</a></li>`);
+        }
+        
+        // 页码
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === page) {
+                pagination.append(`<li class="page-item active"><span class="page-link">${i}</span></li>`);
+            } else if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
+                pagination.append(`<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadReports(${i})">${i}</a></li>`);
+            } else if (i === page - 3 || i === page + 3) {
+                pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+        }
+        
+        // 下一页
+        if (page < totalPages) {
+            pagination.append(`<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadReports(${page + 1})">下一页</a></li>`);
+        }
+    }
+
+    // 加载统计数据
+    function loadStatistics() {
+        $.ajax({
+            url: '{{ url_for("admin.get_report_statistics") }}',
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    $('#totalReports').text(response.data.total);
+                    $('#approvedReports').text(response.data.by_status.approved || 0);
+                    $('#pendingReports').text((response.data.by_status.submitted || 0) + (response.data.by_status.draft || 0));
+                }
+            }
+        });
+        
+        // 计算总下载次数
+        $.ajax({
+            url: '{{ url_for("admin.list_reports") }}',
+            method: 'GET',
+            data: { per_page: 1000 },
+            success: function(response) {
+                if (response.success) {
+                    const totalDownloads = response.data.items.reduce((sum, r) => sum + (r.download_count || 0), 0);
+                    $('#totalDownloads').text(totalDownloads);
+                }
+            }
+        });
+    }
+
+    // 删除报表
+    function deleteReport(reportId) {
+        if (!confirm('确定要删除此报表吗？此操作不可恢复。')) {
+            return;
+        }
+        
+        $.ajax({
+            url: `/admin/reports/${reportId}`,
+            method: 'DELETE',
+            success: function(response) {
+                if (response.success) {
+                    showToast('成功', '报表已删除', 'success');
+                    loadReports(currentPage);
+                    loadStatistics();
+                }
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON?.message || '删除失败';
+                showToast('错误', message, 'error');
+            }
+        });
+    }
+</script>
+{% endblock %}

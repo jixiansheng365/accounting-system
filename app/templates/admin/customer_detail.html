@@ -1,0 +1,439 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ customer.company_name }} - 客户详情{% endblock %}
+
+{% set active_menu = 'customers' %}
+
+{% block extra_css %}
+<style>
+    .detail-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .detail-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detail-section-title i {
+        color: #0d6efd;
+    }
+
+    .detail-item {
+        display: flex;
+        margin-bottom: 16px;
+    }
+
+    .detail-label {
+        width: 120px;
+        color: #6c757d;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #212529;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .status-badge.active { background: #d1fae5; color: #28a745; }
+    .status-badge.suspended { background: #fff3cd; color: #856404; }
+    .status-badge.pending { background: #cfe2ff; color: #0d6efd; }
+    .status-badge.terminated { background: #f8d7da; color: #dc3545; }
+
+    .stat-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #6c757d;
+        margin-top: 8px;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 8px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .action-btn.primary { background: #0d6efd; color: #fff; }
+    .action-btn.primary:hover { background: #0b5ed7; }
+
+    .action-btn.success { background: #28a745; color: #fff; }
+    .action-btn.success:hover { background: #218838; }
+
+    .action-btn.warning { background: #ffc107; color: #212529; }
+    .action-btn.warning:hover { background: #e0a800; }
+
+    .action-btn.danger { background: #dc3545; color: #fff; }
+    .action-btn.danger:hover { background: #c82333; }
+
+    .report-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+
+    .report-icon {
+        width: 40px;
+        height: 40px;
+        background: #cfe2ff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+        color: #0d6efd;
+    }
+
+    .report-info {
+        flex: 1;
+    }
+
+    .report-name {
+        font-weight: 500;
+        color: #212529;
+    }
+
+    .report-meta {
+        font-size: 12px;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">仪表盘</a></li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.customers_page') }}">客户管理</a></li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item active">客户详情</li>
+    </ul>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fa-solid fa-building me-2" style="color: #0d6efd;"></i>
+        {{ customer.company_name }}
+    </h1>
+    <p class="page-subtitle">客户代码: {{ customer.customer_code or '-' }}</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- 基本信息 -->
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-info-circle"></i>基本信息</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">公司名称</span>
+                        <span class="detail-value">{{ customer.company_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">客户代码</span>
+                        <span class="detail-value">{{ customer.customer_code or '-' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">统一信用代码</span>
+                        <span class="detail-value">{{ customer.credit_code or '-' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">纳税类型</span>
+                        <span class="detail-value">
+                            {% if customer.tax_type == 'general' %}一般纳税人
+                            {% elif customer.tax_type == 'small' %}小规模纳税人
+                            {% else %}-{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">状态</span>
+                        <span class="detail-value">
+                            <span class="status-badge {{ customer.status }}">
+                                {% if customer.status == 'active' %}正常
+                                {% elif customer.status == 'pending' %}待审核
+                                {% elif customer.status == 'suspended' %}已暂停
+                                {% elif customer.status == 'terminated' %}已终止
+                                {% endif %}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">创建时间</span>
+                        <span class="detail-value">{{ customer.created_at.strftime('%Y-%m-%d %H:%M') if customer.created_at else '-' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">更新时间</span>
+                        <span class="detail-value">{{ customer.updated_at.strftime('%Y-%m-%d %H:%M') if customer.updated_at else '-' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">注册地址</span>
+                <span class="detail-value">{{ customer.address or '-' }}</span>
+            </div>
+        </div>
+
+        <!-- 联系人信息 -->
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-user"></i>联系人信息</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="detail-item">
+                        <span class="detail-label">联系人</span>
+                        <span class="detail-value">{{ customer.contact_name or '-' }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="detail-item">
+                        <span class="detail-label">联系电话</span>
+                        <span class="detail-value">{{ customer.contact_phone or '-' }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="detail-item">
+                        <span class="detail-label">电子邮箱</span>
+                        <span class="detail-value">{{ customer.contact_email or '-' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 服务信息 -->
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-briefcase"></i>服务信息</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">负责会计</span>
+                        <span class="detail-value">{{ customer.accountant_name or '未分配' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">服务周期</span>
+                        <span class="detail-value">
+                            {% if customer.service_period == 'monthly' %}月度
+                            {% elif customer.service_period == 'quarterly' %}季度
+                            {% elif customer.service_period == 'yearly' %}年度
+                            {% else %}-{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">服务开始</span>
+                        <span class="detail-value">{{ customer.service_start_date.strftime('%Y-%m-%d') if customer.service_start_date else '-' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">服务结束</span>
+                        <span class="detail-value">{{ customer.service_end_date.strftime('%Y-%m-%d') if customer.service_end_date else '-' }}</span>
+                    </div>
+                </div>
+            </div>
+            {% if customer.remarks %}
+            <div class="detail-item">
+                <span class="detail-label">备注</span>
+                <span class="detail-value">{{ customer.remarks }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- 最近报表 -->
+        {% if report_stats and report_stats.recent_reports %}
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-file-invoice"></i>最近报表</h3>
+            {% for report in report_stats.recent_reports[:5] %}
+            <div class="report-item">
+                <div class="report-icon">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div class="report-info">
+                    <div class="report-name">{{ report.report_name }}</div>
+                    <div class="report-meta">{{ report.report_type_display }} | {{ report.period_display }} | {{ report.created_at[:10] }}</div>
+                </div>
+                <a href="{{ url_for('reports.download_report', report_id=report.id) }}" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-download"></i>
+                </a>
+            </div>
+            {% endfor %}
+            <div class="text-center mt-3">
+                <a href="{{ url_for('admin.upload_page', customer_id=customer.id) }}" class="btn btn-primary">
+                    <i class="fa-solid fa-cloud-arrow-up me-2"></i>上传新报表
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <!-- 统计卡片 -->
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-chart-pie"></i>统计信息</h3>
+            <div class="row">
+                <div class="col-6">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ report_stats.total if report_stats else 0 }}</div>
+                        <div class="stat-label">报表总数</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ report_stats.by_status.approved if report_stats and report_stats.by_status else 0 }}</div>
+                        <div class="stat-label">已批准</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 登录账号信息 -->
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-key"></i>登录账号</h3>
+            {% if login_user %}
+            <div class="detail-item">
+                <span class="detail-label">用户名</span>
+                <span class="detail-value">{{ login_user.username }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">邮箱</span>
+                <span class="detail-value">{{ login_user.email or '-' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">状态</span>
+                <span class="detail-value">
+                    <span class="status-badge {{ 'active' if login_user.is_active else 'suspended' }}">
+                        {{ '正常' if login_user.is_active else '已禁用' }}
+                    </span>
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">最后登录</span>
+                <span class="detail-value">{{ login_user.last_login.strftime('%Y-%m-%d %H:%M') if login_user.last_login else '从未登录' }}</span>
+            </div>
+            {% else %}
+            <p class="text-muted">该客户尚未创建登录账号</p>
+            {% endif %}
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="detail-card modern-box">
+            <h3 class="detail-section-title"><i class="fa-solid fa-bolt"></i>快捷操作</h3>
+            <a href="{{ url_for('admin.customer_edit_page', customer_id=customer.id) }}" class="action-btn primary">
+                <i class="fa-solid fa-pen"></i>编辑客户
+            </a>
+            <a href="{{ url_for('admin.upload_page', customer_id=customer.id) }}" class="action-btn success">
+                <i class="fa-solid fa-cloud-arrow-up"></i>上传报表
+            </a>
+            {% if not login_user %}
+            <button class="action-btn warning" onclick="createLoginAccount()">
+                <i class="fa-solid fa-user-plus"></i>创建登录账号
+            </button>
+            {% endif %}
+            <button class="action-btn danger" onclick="deleteCustomer()">
+                <i class="fa-solid fa-trash"></i>删除客户
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function deleteCustomer() {
+        if (!confirm('确定要删除此客户吗？此操作不可恢复。')) {
+            return;
+        }
+        
+        $.ajax({
+            url: '/admin/customers/{{ customer.id }}',
+            method: 'DELETE',
+            success: function(response) {
+                if (response.success) {
+                    showToast('成功', '客户已删除', 'success');
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for('admin.customers_page') }}';
+                    }, 1500);
+                }
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON?.message || '删除失败';
+                showToast('错误', message, 'error');
+            }
+        });
+    }
+
+    function createLoginAccount() {
+        const username = prompt('请输入登录用户名:');
+        if (!username) return;
+        
+        const password = prompt('请输入登录密码:');
+        if (!password) return;
+        
+        $.ajax({
+            url: '/admin/customers/{{ customer.id }}/create-login',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                username: username,
+                password: password
+            }),
+            success: function(response) {
+                if (response.success) {
+                    showToast('成功', '登录账号创建成功', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                }
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON?.message || '创建失败';
+                showToast('错误', message, 'error');
+            }
+        });
+    }
+</script>
+{% endblock %}

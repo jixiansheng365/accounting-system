@@ -1,0 +1,292 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ '编辑客户' if mode == 'edit' else '新增客户' }}{% endblock %}
+
+{% set active_menu = 'customers' %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .form-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-section-title i {
+        color: #0d6efd;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        font-size: 14px;
+    }
+
+    .form-label .required {
+        color: #dc3545;
+        margin-left: 4px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 10px 14px;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .form-text {
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    .btn-submit {
+        padding: 12px 32px;
+        font-weight: 500;
+    }
+
+    .btn-cancel {
+        padding: 12px 24px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<div class="breadcrumb-wrapper">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">仪表盘</a></li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('admin.customers_page') }}">客户管理</a></li>
+        <li class="breadcrumb-separator"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></li>
+        <li class="breadcrumb-item active">{{ '编辑客户' if mode == 'edit' else '新增客户' }}</li>
+    </ul>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fa-solid {{ 'fa-pen-to-square' if mode == 'edit' else 'fa-plus-circle' }} me-2" style="color: #0d6efd;"></i>
+        {{ '编辑客户' if mode == 'edit' else '新增客户' }}
+    </h1>
+    <p class="page-subtitle">{{ '修改客户信息' if mode == 'edit' else '填写客户基本信息' }}</p>
+</div>
+
+<!-- 表单 -->
+<form id="customerForm" onsubmit="return submitForm()">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- 基本信息 -->
+            <div class="form-section modern-box" style="padding: 24px;">
+                <h3 class="form-section-title"><i class="fa-solid fa-building"></i>基本信息</h3>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">公司名称 <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="companyName" name="company_name" 
+                               value="{{ customer.company_name if customer else '' }}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">客户代码</label>
+                        <input type="text" class="form-control" id="customerCode" name="customer_code"
+                               value="{{ customer.customer_code if customer else '' }}">
+                        <div class="form-text">如不填写，系统将自动生成</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">统一社会信用代码</label>
+                        <input type="text" class="form-control" id="creditCode" name="credit_code"
+                               value="{{ customer.credit_code if customer else '' }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">纳税类型 <span class="required">*</span></label>
+                        <select class="form-select" id="taxType" name="tax_type" required>
+                            <option value="">请选择</option>
+                            <option value="general" {{ 'selected' if customer and customer.tax_type == 'general' else '' }}>一般纳税人</option>
+                            <option value="small" {{ 'selected' if customer and customer.tax_type == 'small' else '' }}>小规模纳税人</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">注册地址</label>
+                    <textarea class="form-control" id="address" name="address" rows="2">{{ customer.address if customer else '' }}</textarea>
+                </div>
+            </div>
+
+            <!-- 联系人信息 -->
+            <div class="form-section modern-box" style="padding: 24px;">
+                <h3 class="form-section-title"><i class="fa-solid fa-user"></i>联系人信息</h3>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">联系人姓名 <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="contactName" name="contact_name"
+                               value="{{ customer.contact_name if customer else '' }}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">联系电话 <span class="required">*</span></label>
+                        <input type="tel" class="form-control" id="contactPhone" name="contact_phone"
+                               value="{{ customer.contact_phone if customer else '' }}" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">电子邮箱</label>
+                        <input type="email" class="form-control" id="contactEmail" name="contact_email"
+                               value="{{ customer.contact_email if customer else '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 服务信息 -->
+            <div class="form-section modern-box" style="padding: 24px;">
+                <h3 class="form-section-title"><i class="fa-solid fa-briefcase"></i>服务信息</h3>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">负责会计</label>
+                        <select class="form-select" id="accountantId" name="accountant_id">
+                            <option value="">请选择</option>
+                            {% for accountant in accountants %}
+                            <option value="{{ accountant.id }}" 
+                                {{ 'selected' if customer and customer.accountant_id == accountant.id else '' }}>
+                                {{ accountant.real_name or accountant.username }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">服务周期</label>
+                        <select class="form-select" id="servicePeriod" name="service_period">
+                            <option value="monthly" {{ 'selected' if customer and customer.service_period == 'monthly' else '' }}>月度</option>
+                            <option value="quarterly" {{ 'selected' if customer and customer.service_period == 'quarterly' else '' }}>季度</option>
+                            <option value="yearly" {{ 'selected' if customer and customer.service_period == 'yearly' else '' }}>年度</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">服务开始日期</label>
+                        <input type="date" class="form-control" id="serviceStartDate" name="service_start_date"
+                               value="{{ customer.service_start_date.strftime('%Y-%m-%d') if customer and customer.service_start_date else '' }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">服务结束日期</label>
+                        <input type="date" class="form-control" id="serviceEndDate" name="service_end_date"
+                               value="{{ customer.service_end_date.strftime('%Y-%m-%d') if customer and customer.service_end_date else '' }}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">备注</label>
+                    <textarea class="form-control" id="remarks" name="remarks" rows="3">{{ customer.remarks if customer else '' }}</textarea>
+                </div>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary btn-submit">
+                    <i class="fa-solid fa-save me-2"></i>保存
+                </button>
+                <a href="{{ url_for('admin.customers_page') }}" class="btn btn-secondary btn-cancel">
+                    <i class="fa-solid fa-xmark me-2"></i>取消
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- 状态设置 -->
+            <div class="form-section modern-box" style="padding: 24px;">
+                <h3 class="form-section-title"><i class="fa-solid fa-toggle-on"></i>状态设置</h3>
+                
+                <div class="mb-3">
+                    <label class="form-label">客户状态</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="active" {{ 'selected' if customer and customer.status == 'active' else '' }}>正常</option>
+                        <option value="pending" {{ 'selected' if customer and customer.status == 'pending' else '' }}>待审核</option>
+                        <option value="suspended" {{ 'selected' if customer and customer.status == 'suspended' else '' }}>已暂停</option>
+                        <option value="terminated" {{ 'selected' if customer and customer.status == 'terminated' else '' }}>已终止</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 提示信息 -->
+            <div class="form-section modern-box" style="padding: 24px;">
+                <h3 class="form-section-title"><i class="fa-solid fa-lightbulb"></i>提示</h3>
+                <ul class="mb-0" style="padding-left: 16px; font-size: 14px; color: #6c757d;">
+                    <li class="mb-2">带 <span style="color: #dc3545;">*</span> 号的字段为必填项</li>
+                    <li class="mb-2">客户代码如不填写，系统将自动生成</li>
+                    <li class="mb-2">服务周期影响报表生成频率</li>
+                    <li>客户创建后可为其创建登录账号</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function submitForm() {
+        const formData = {
+            company_name: $('#companyName').val(),
+            customer_code: $('#customerCode').val(),
+            credit_code: $('#creditCode').val(),
+            tax_type: $('#taxType').val(),
+            address: $('#address').val(),
+            contact_name: $('#contactName').val(),
+            contact_phone: $('#contactPhone').val(),
+            contact_email: $('#contactEmail').val(),
+            accountant_id: $('#accountantId').val() || null,
+            service_period: $('#servicePeriod').val(),
+            service_start_date: $('#serviceStartDate').val() || null,
+            service_end_date: $('#serviceEndDate').val() || null,
+            status: $('#status').val(),
+            remarks: $('#remarks').val()
+        };
+
+        const isEdit = '{{ mode }}' === 'edit';
+        const url = isEdit ? '/admin/customers/{{ customer.id }}' : '/admin/customers';
+        const method = isEdit ? 'PUT' : 'POST';
+
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    showToast('成功', isEdit ? '客户信息已更新' : '客户创建成功', 'success');
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for('admin.customers_page') }}';
+                    }, 1500);
+                }
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON?.message || '保存失败';
+                showToast('错误', message, 'error');
+            }
+        });
+
+        return false;
+    }
+</script>
+{% endblock %}

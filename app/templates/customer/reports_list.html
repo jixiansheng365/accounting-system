@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月度报表 - 代理记账客户管理系统</title>
+    <!-- Bootstrap5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <style>
+        /* 返回按钮样式 */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(13, 110, 253, 0.4);
+        }
+        
+        /* 用户头像样式 */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 退出按钮样式 */
+        .logout-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* 侧边栏底部用户区域 */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* DataTables 样式优化 */
+        .dataTables_wrapper {
+            padding: 0;
+        }
+        
+        .dataTables_length,
+        .dataTables_filter {
+            margin-bottom: 15px;
+        }
+        
+        .dataTables_length select,
+        .dataTables_filter input {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+        
+        .dataTables_info,
+        .dataTables_paginate {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局响应式容器 -->
+    <div class="container-fluid px-3 px-md-4">
+        <div class="dashboard-wrapper">
+            <!-- 侧边栏导航 -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="brand">
+                        <div class="brand-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <div>
+                            <div class="brand-text">代理记账系统</div>
+                            <div class="brand-subtitle">客户门户</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <ul class="nav-menu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('main.dashboard') }}" class="nav-link">
+                                    <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                                    <span>{{ _('Dashboard') }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('reports.query_reports') }}" class="nav-link">
+                                    <span class="nav-icon"><i class="fa-solid fa-folder-open"></i></span>
+                                    <span>{{ _('Report Query') }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('reports.list_reports') }}" class="nav-link active">
+                                    <span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                                    <span>{{ _('Monthly Reports') }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <ul class="nav-menu">
+                            <li class="nav-item">
+                                <a href="{{ url_for('reports.login_history') }}" class="nav-link">
+                                    <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                                    <span>{{ _('Login History') }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+                                    <span>{{ _('Settings') }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <!-- 底部用户区域 -->
+                <div class="sidebar-footer">
+                    <div class="user-menu">
+                        <div class="user-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ session.get('username', '用户') }}</div>
+                            <div class="user-role">客户</div>
+                        </div>
+                        <a href="{{ url_for('auth.logout_page') }}" class="logout-btn">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            退出
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 主内容区 -->
+            <main class="main-content">
+                <!-- 顶部导航栏 -->
+                <header class="top-header">
+                    <div class="header-search">
+                        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" class="search-input" placeholder="搜索报表、文档...">
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="badge"></span>
+                        </button>
+                        <button class="header-btn"><i class="fa-solid fa-circle-question"></i></button>
+                    </div>
+                </header>
+
+                <!-- 页面内容 -->
+                <div class="page-content">
+                    <!-- 返回按钮 -->
+                    <button class="back-button" onclick="history.back()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        {{ _('Back') }}
+                    </button>
+                    
+                    <!-- 页面标题 -->
+                    <div class="page-header">
+                        <h1 class="page-title">{{ _('Monthly Reports') }}</h1>
+                        <p class="page-subtitle">{{ _('View and manage all your monthly reports') }}</p>
+                    </div>
+
+                    <!-- 报表列表卡片 -->
+                    <div class="modern-box">
+                        <h4 class="modern-title">
+                            <i class="fa-solid fa-list"></i>
+                            {{ _('Report List') }}
+                            {% if reports %}
+                            <span class="badge bg-primary ms-2">{{ reports|length }}</span>
+                            {% endif %}
+                        </h4>
+                        
+                        {% if reports %}
+                        <div class="table-wrapper">
+                            <table class="data-table table table-hover table-striped align-middle" id="reportsTable">
+                                <thead>
+                                    <tr>
+                                        <th>{{ _('Report Name') }}</th>
+                                        <th>{{ _('Report Type') }}</th>
+                                        <th>{{ _('Period') }}</th>
+                                        <th>{{ _('Status') }}</th>
+                                        <th>{{ _('Upload Date') }}</th>
+                                        <th>{{ _('Download Count') }}</th>
+                                        <th>{{ _('Action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for report in reports %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ report.report_name }}</strong>
+                                            {% if report.file_type == 'pdf' %}
+                                            <span class="badge bg-danger ms-1">PDF</span>
+                                            {% elif report.file_type in ['xls', 'xlsx'] %}
+                                            <span class="badge bg-success ms-1">Excel</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">{{ report.report_type_display }}</span>
+                                        </td>
+                                        <td>{{ report.period_display }}</td>
+                                        <td>
+                                            {% if report.status == 'draft' %}
+                                            <span class="badge bg-secondary">草稿</span>
+                                            {% elif report.status == 'submitted' %}
+                                            <span class="badge bg-warning">已提交</span>
+                                            {% elif report.status == 'reviewed' %}
+                                            <span class="badge bg-info">已审核</span>
+                                            {% elif report.status == 'approved' %}
+                                            <span class="badge bg-success">已批准</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">{{ report.status_display }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ report.created_at[:10] if report.created_at else '-' }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                <i class="fa-solid fa-download me-1"></i>{{ report.download_count or 0 }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                {% if report.file_type == 'pdf' %}
+                                                <a href="{{ url_for('reports.preview_report', report_id=report.id) }}" target="_blank" class="btn btn-sm btn-info">
+                                                    <i class="fa-solid fa-eye"></i> 预览
+                                                </a>
+                                                {% endif %}
+                                                <a href="{{ url_for('reports.download_report', report_id=report.id) }}" class="btn btn-sm btn-primary">
+                                                    <i class="fa-solid fa-download"></i> 下载
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 分页 -->
+                        {% if pagination and pagination.pages > 1 %}
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if pagination.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('reports.list_reports', page=pagination.prev_num) }}">上一页</a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for page_num in pagination.iter_pages() %}
+                                    {% if page_num %}
+                                        {% if page_num == pagination.page %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ page_num }}</span>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url_for('reports.list_reports', page=page_num) }}">{{ page_num }}</a>
+                                        </li>
+                                        {% endif %}
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if pagination.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('reports.list_reports', page=pagination.next_num) }}">下一页</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        
+                        {% else %}
+                        <div style="text-align: center; padding: 60px 20px;">
+                            <div style="font-size: 64px; margin-bottom: 16px; opacity: 0.5;">
+                                <i class="fa-solid fa-folder-open"></i>
+                            </div>
+                            <p style="color: #6c757d;">暂无报表</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- jQuery 和 DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // 初始化 DataTables
+        $('#reportsTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/zh.json'
+            },
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, '全部']],
+            ordering: true,
+            searching: true,
+            info: true,
+            paging: false  // 使用服务器端分页，禁用客户端分页
+        });
+    });
+    </script>
+    <!-- Bootstrap5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
