@@ -671,3 +671,85 @@ msgstr "请选择要下载的报表"
 
 msgid "Reset"
 msgstr "重置"
+
+# 企业信息页面
+msgid "Company Information"
+msgstr "企业信息"
+
+msgid "Customer Code"
+msgstr "客户代码"
+
+msgid "Active"
+msgstr "活跃"
+
+msgid "Inactive"
+msgstr "未激活"
+
+msgid "Basic Information"
+msgstr "基本信息"
+
+msgid "Company Name"
+msgstr "公司名称"
+
+msgid "Company Code"
+msgstr "公司代码"
+
+msgid "Tax ID"
+msgstr "税号"
+
+msgid "Tax Type"
+msgstr "纳税人类型"
+
+msgid "General Taxpayer"
+msgstr "一般纳税人"
+
+msgid "Small-scale Taxpayer"
+msgstr "小规模纳税人"
+
+msgid "Industry"
+msgstr "行业"
+
+msgid "Contact Information"
+msgstr "联系方式"
+
+msgid "Contact Person"
+msgstr "联系人"
+
+msgid "Contact Phone"
+msgstr "联系电话"
+
+msgid "Email"
+msgstr "邮箱"
+
+msgid "Phone Number"
+msgstr "手机号码"
+
+msgid "Address Information"
+msgstr "地址信息"
+
+msgid "Company Address"
+msgstr "公司地址"
+
+msgid "Tax Bureau"
+msgstr "税务局"
+
+msgid "Service Information"
+msgstr "服务信息"
+
+msgid "Service Start Date"
+msgstr "服务开始日期"
+
+msgid "Service End Date"
+msgstr "服务结束日期"
+
+msgid "Service Fee"
+msgstr "服务费用"
+
+msgid "Service Cycle"
+msgstr "服务周期"
+
+msgid "Remarks"
+msgstr "备注"
+
+msgid "No company information available"
+msgstr "暂无企业信息"

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'zh_CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Company Information') }} - {{ _('Accounting Customer Management System') }}</title>
+    <!-- Bootstrap5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 返回按钮样式 */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 用户头像样式 */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 退出按钮样式 */
+        .logout-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+        }
+        
+        /* 侧边栏底部用户区域 */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        /* 企业信息卡片 */
+        .company-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+        
+        .company-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .company-title h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0 0 8px 0;
+        }
+        
+        .company-title p {
+            font-size: 14px;
+            color: #718096;
+            margin: 0;
+        }
+        
+        .info-section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            color: #3b82f6;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .info-item {
+            padding: 16px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            font-size: 15px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .status-badge.active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+        
+        .status-badge.inactive {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 全局响应式容器 -->
+    <div class="container-fluid px-3 px-md-4">
+        <div class="dashboard-wrapper">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div>
+                        <div class="brand-text">{{ _('Accounting Customer Management System') }}</div>
+                        <div class="brand-subtitle">{{ _('Accounting Portal') }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.dashboard', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+                                <span>{{ _('Dashboard') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.query_reports', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-folder-open"></i></span>
+                                <span>{{ _('Report Query') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.list_reports', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-file-invoice"></i></span>
+                                <span>{{ _('Monthly Reports') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('reports.login_history', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                                <span>{{ _('Login History') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.company_info', lang=session.get('lang', 'zh_CN')) }}" class="nav-link active">
+                                <span class="nav-icon"><i class="fa-solid fa-building"></i></span>
+                                <span>{{ _('Company Information') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- 底部用户区域 -->
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ session.get('username', _('Customer')) }}</div>
+                        <div class="user-role">{{ _('Customer') }}</div>
+                    </div>
+                    <a href="{{ url_for('auth.logout_page') }}" class="logout-btn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        {{ _('Logout') }}
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航栏 -->
+            <header class="top-header">
+                <div class="header-search">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="search-input" placeholder="{{ _('Search') }}...">
+                </div>
+                <div class="header-actions">
+                    <div class="language-switcher" style="display: flex; gap: 8px; margin-right: 16px; align-items: center;">
+                        <a href="?lang=zh_CN" class="{% if session.get('lang') == 'zh_CN' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">简</a>
+                        <a href="?lang=zh_TW" class="{% if session.get('lang') == 'zh_TW' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">繁</a>
+                        <a href="?lang=ja" class="{% if session.get('lang') == 'ja' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">日</a>
+                        <a href="?lang=ko" class="{% if session.get('lang') == 'ko' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">韩</a>
+                        <a href="?lang=en" class="{% if session.get('lang') == 'en' %}fw-bold{% endif %}" style="font-size: 12px; color: #6c757d; text-decoration: none;">EN</a>
+                    </div>
+                    <button class="header-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge"></span>
+                    </button>
+                    <button class="header-btn"><i class="fa-solid fa-circle-question"></i></button>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <div class="page-content">
+                <!-- 返回按钮 -->
+                <button class="back-button" onclick="history.back()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    {{ _('Back') }}
+                </button>
+                
+                <!-- 企业信息卡片 -->
+                <div class="company-info-card">
+                    <!-- 企业头部 -->
+                    <div class="company-header">
+                        <div class="company-logo">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div class="company-title">
+                            <h2>{{ customer.company_name if customer else _('Company Information') }}</h2>
+                            <p>{{ _('Customer Code') }}: {{ customer.customer_code if customer else '-' }}</p>
+                        </div>
+                        {% if customer and customer.status == 'active' %}
+                        <div class="ms-auto">
+                            <span class="status-badge active">
+                                <i class="fa-solid fa-circle-check"></i>
+                                {{ _('Active') }}
+                            </span>
+                        </div>
+                        {% else %}
+                        <div class="ms-auto">
+                            <span class="status-badge inactive">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                {{ _('Inactive') }}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if customer %}
+                    <!-- 基本信息 -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-circle-info"></i>
+                            {{ _('Basic Information') }}
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Company Name') }}</div>
+                                <div class="info-value">{{ customer.company_name or '-' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Customer Code') }}</div>
+                                <div class="info-value">{{ customer.customer_code or '-' }}</div>
+                            </div>
+                            {% if customer.company_code %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Company Code') }}</div>
+                                <div class="info-value">{{ customer.company_code }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.tax_id %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Tax ID') }}</div>
+                                <div class="info-value">{{ customer.tax_id }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.tax_type %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Tax Type') }}</div>
+                                <div class="info-value">
+                                    {% if customer.tax_type == 'general' %}
+                                        {{ _('General Taxpayer') }}
+                                    {% elif customer.tax_type == 'small' %}
+                                        {{ _('Small-scale Taxpayer') }}
+                                    {% else %}
+                                        {{ customer.tax_type }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% if customer.industry %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Industry') }}</div>
+                                <div class="info-value">{{ customer.industry }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- 联系方式 -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-address-book"></i>
+                            {{ _('Contact Information') }}
+                        </div>
+                        <div class="info-grid">
+                            {% if customer.contact_name %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Contact Person') }}</div>
+                                <div class="info-value">{{ customer.contact_name }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.contact_phone %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Contact Phone') }}</div>
+                                <div class="info-value">{{ customer.contact_phone }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.contact_email %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Email') }}</div>
+                                <div class="info-value">{{ customer.contact_email }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.phone_number %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Phone Number') }}</div>
+                                <div class="info-value">{{ customer.phone_number }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- 地址信息 -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ _('Address Information') }}
+                        </div>
+                        <div class="info-grid">
+                            {% if customer.address %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Company Address') }}</div>
+                                <div class="info-value">{{ customer.address }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.tax_bureau %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Tax Bureau') }}</div>
+                                <div class="info-value">{{ customer.tax_bureau }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- 服务信息 -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-file-contract"></i>
+                            {{ _('Service Information') }}
+                        </div>
+                        <div class="info-grid">
+                            {% if customer.service_start_date %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Service Start Date') }}</div>
+                                <div class="info-value">{{ customer.service_start_date }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.service_end_date %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Service End Date') }}</div>
+                                <div class="info-value">{{ customer.service_end_date }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.service_fee %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Service Fee') }}</div>
+                                <div class="info-value">¥{{ customer.service_fee }}</div>
+                            </div>
+                            {% endif %}
+                            {% if customer.service_cycle %}
+                            <div class="info-item">
+                                <div class="info-label">{{ _('Service Cycle') }}</div>
+                                <div class="info-value">{{ customer.service_cycle }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if customer.remarks %}
+                    <!-- 备注信息 -->
+                    <div class="info-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-comment"></i>
+                            {{ _('Remarks') }}
+                        </div>
+                        <div class="info-item">
+                            <div class="info-value">{{ customer.remarks }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% else %}
+                    <div class="empty-state" style="text-align: center; padding: 60px 20px;">
+                        <div style="font-size: 64px; margin-bottom: 16px; opacity: 0.5;">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <p style="color: #6c757d;">{{ _('No company information available') }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+    <!-- Bootstrap5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

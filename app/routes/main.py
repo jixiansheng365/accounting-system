@@ -119,3 +119,18 @@ def dashboard():
                            detail_ledgers=detail_ledgers,
                            this_month_reports=this_month_reports,
                            unread_count=unread_count)
+
+
+@main_bp.route('/company-info')
+def company_info():
+    """企业信息页面 / Company Information"""
+    if not session.get('user_id'):
+        return redirect(url_for('auth.login_page'))
+    
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    
+    # 获取关联的客户信息
+    customer = Customer.query.filter_by(user_id=user_id).first()
+    
+    return render_template('customer/company_info.html', user=user, customer=customer)

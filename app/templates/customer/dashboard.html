@@ -163,6 +163,12 @@
                                 <span>{{ _('Login History') }}</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.company_info', lang=session.get('lang', 'zh_CN')) }}" class="nav-link">
+                                <span class="nav-icon"><i class="fa-solid fa-building"></i></span>
+                                <span>{{ _('Company Information') }}</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
