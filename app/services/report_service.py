@@ -472,9 +472,25 @@ class ReportService:
         
         # 如果是相对路径，转换为绝对路径
         file_path = report.file_path
+        
+        # 处理以 / 开头的路径（Unix 风格相对路径）
+        if file_path.startswith('/'):
+            file_path = file_path[1:]  # 去掉开头的 /
+        
         if not os.path.isabs(file_path):
             upload_folder = current_app.config.get('UPLOAD_FOLDER', 'uploads')
-            file_path = os.path.join(current_app.root_path, '..', upload_folder, report.file_path)
+            # 确保 upload_folder 是字符串
+            if isinstance(upload_folder, str):
+                upload_dir = upload_folder
+            else:
+                upload_dir = 'uploads'
+            
+            # 如果 upload_dir 已经是绝对路径，直接拼接 file_path
+            if os.path.isabs(upload_dir):
+                file_path = os.path.join(upload_dir, file_path)
+            else:
+                file_path = os.path.join(current_app.root_path, '..', upload_dir, file_path)
+            
             file_path = os.path.abspath(file_path)
         
         # 检查文件是否存在

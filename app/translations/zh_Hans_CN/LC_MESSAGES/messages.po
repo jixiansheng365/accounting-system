@@ -510,3 +510,164 @@ msgstr "管理后台"
 
 msgid "Administrator"
 msgstr "管理员"
+
+# 客户门户菜单
+msgid "Report Query"
+msgstr "报表查询"
+
+msgid "Monthly Reports"
+msgstr "月度报表"
+
+msgid "Login History"
+msgstr "登录历史"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Accounting Portal"
+msgstr "客户门户"
+
+msgid "Customer"
+msgstr "客户"
+
+# 客户门户页面通用
+msgid "Welcome back"
+msgstr "欢迎回来"
+
+msgid "You have"
+msgstr "您有"
+
+msgid "new reports"
+msgstr "份新报表"
+
+msgid "Last Month"
+msgstr "上月"
+
+msgid "Quick Actions"
+msgstr "快捷操作"
+
+msgid "Query Reports"
+msgstr "查询报表"
+
+msgid "Filter by period"
+msgstr "按期间筛选"
+
+msgid "View Records"
+msgstr "查看记录"
+
+msgid "System Status"
+msgstr "系统状态"
+
+msgid "System Running"
+msgstr "系统运行"
+
+msgid "Normal"
+msgstr "正常"
+
+msgid "Data Sync"
+msgstr "数据同步"
+
+msgid "Service Status"
+msgstr "服务状态"
+
+msgid "Online"
+msgstr "在线"
+
+msgid "Recent Reports"
+msgstr "最近报表"
+
+msgid "View All"
+msgstr "查看全部"
+
+msgid "Completed"
+msgstr "已完成"
+
+msgid "No reports found"
+msgstr "暂无报表"
+
+# 登录历史页面
+msgid "View your recent login activities and security information"
+msgstr "查看您最近的登录活动和安全信息"
+
+msgid "Total Logins"
+msgstr "总登录次数"
+
+msgid "Successful Logins"
+msgstr "成功登录"
+
+msgid "Failed Logins"
+msgstr "失败登录"
+
+msgid "Recent Login Activities"
+msgstr "最近登录活动"
+
+msgid "Date Time"
+msgstr "日期时间"
+
+msgid "Location"
+msgstr "地点"
+
+msgid "Device"
+msgstr "设备"
+
+msgid "Failed"
+msgstr "失败"
+
+msgid "No login history records"
+msgstr "暂无登录历史记录"
+
+# 月度报表页面
+msgid "View and manage all your monthly reports"
+msgstr "查看和管理您的所有月度报表"
+
+msgid "Report List"
+msgstr "报表列表"
+
+msgid "Report Name"
+msgstr "报表名称"
+
+msgid "Action"
+msgstr "操作"
+
+# 报表查询页面
+msgid "Search and download your financial reports"
+msgstr "搜索和下载您的财务报表"
+
+msgid "Filter Reports"
+msgstr "筛选报表"
+
+msgid "Year"
+msgstr "年份"
+
+msgid "Month"
+msgstr "月份"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Quick Filter"
+msgstr "快速筛选"
+
+msgid "Last 3 Months"
+msgstr "最近3个月"
+
+msgid "Last 6 Months"
+msgstr "最近6个月"
+
+msgid "Last Year"
+msgstr "最近一年"
+
+msgid "Search Results"
+msgstr "搜索结果"
+
+msgid "File Name"
+msgstr "文件名"
+
+msgid "Bulk Download"
+msgstr "批量下载"
+
+msgid "Please select reports to download"
+msgstr "请选择要下载的报表"
+
+msgid "Reset"
+msgstr "重置"
